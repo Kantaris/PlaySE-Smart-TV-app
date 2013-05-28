@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title>Play2</title>
+
+		<!-- TODO : Common API -->
+		<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/Widget.js"></script>
+		<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/TVKeyValue.js"></script>
+		<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/jquery.js"></script>
+		<!-- js/jquery.min.js -->
+	
+		<!-- TODO : Javascript code -->
+		<script language="javascript" type="text/javascript" src="app/javascript/SearchList.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/Buttons.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/PathHistory.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/Search.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/Language.js"></script>
+		<script language="javascript" type="text/javascript" src="app/javascript/ConnectionError.js"></script>
+		<!-- TODO : Style sheets code -->
+		<link rel="stylesheet" type="text/css" href="css/styles.css" />
+		<link rel="stylesheet" type="text/css" href="css/green.css" />
+		
+	</head>
+
+
+<body onload="SearchList.onLoad();" onunload="SearchList.onUnload();">
+
+		<!-- Dummy anchor as focus for key events -->
+		<a href="javascript:void(0);" id="anchor" onkeydown="Buttons.keyDown();"></a>
+
+		<!-- TODO: your code here -->
+		
+		<div id="outer">
+
+
+
+	<div class="container">
+
+            
+
+<!-- header -->    
+
+     <div class="header">
+
+    	<div class="logo"><a href="index.html"><img src="images/weeb2.png" alt="" border="0" /></a></div>
+
+
+
+        <div class="socials">
+
+        	<p><a href="#" class="social-fb" id="companyName">Utvecklad av Christofer Persson åt Kantaris Co.Ltd</a></p>
+
+        </div>
+
+        
+
+        <div class="topmenu">
+
+        	<ul class="dropdown">
+
+            	<li class="root-item"><a href="index.html" class="active">START</a></li>
+                <li class="root-item"><a href="index.html" class="active">KULTUR OCH NÖJE</a></li>
+                <li class="root-item"><a href="index.html" class="active">PÅ SPÅRET</a></li>
+
+            </ul>
+
+        </div>
+
+        
+
+      <div class="clear"></div>
+
+    </div>
+
+    <div class="slider-language">
+                <div class="language-content">
+
+                        <ul>
+
+                            <li class="title"><a href="#">Language / Språk:</a></li>
+
+                            <li id="english" class="selected"><a href="#">English</a></li>
+
+                            <li id="swedish" class="checked unselected"><a href="#">Svenska</a></li>
+
+                        </ul>
+
+                </div>
+            </div>
+<div class="slider-error">
+                <div class="error-content">
+
+                        <ul>
+
+                            <li class="btext"><a href="#">Connection error, can't connect to svtplay.se.</a></li>
+
+                            <li id="breturn" class="selected"><a href="#">Retry</a></li>
+
+
+                        </ul>
+
+                </div>
+            </div>
+<!--/ header -->
+
+
+
+   		<!-- slider -->
+
+        <div class="slider-body">
+
+        
+                    
+
+            <div id="content-scroll">
+
+              <div id="topRow" class="content-holder"></div>
+              <div id="bottomRow" class="content-holder"></div>
+              
+
+            </div>
+
+             <div class="slider-filter">
+                    <div class="filter-content">
+                        <div class="input_bg">
+                            <input id="write" class="footer_input" type="text" value="Sök programtitlar..." />
+                        </div>
+                        <ul class="keyboard">
+                            <li class="symbol row1 selected">!</li>
+                            <li class="symbol row1">1</li>
+                            <li class="symbol row1">2</li>
+                            <li class="symbol row1">3</li>
+                            <li class="symbol row1">4</li>
+                            <li class="symbol row1">5</li>
+                            <li class="symbol row1">6</li>
+                            <li class="symbol row1">7</li>
+                            <li class="symbol row1">8</li>
+                            <li class="symbol row1">9</li>
+                            <li class="symbol row1">0</li>
+                            <li class="symbol row1">-</li>
+                            <li class="symbol row1">+</li>
+                            <li class="delete row1 lastitem" id="delete">Ta Bort</li>
+                        </ul>
+                        <ul class="keyboard">
+                            <li class="tab row2">Tab</li>
+                            <li class="letter row2">q</li>
+                            <li class="letter row2">w</li>
+                            <li class="letter row2">e</li>
+                            <li class="letter row2">r</li>
+                            <li class="letter row2">t</li>
+                            <li class="letter row2">y</li>
+                            <li class="letter row2">u</li>
+                            <li class="letter row2">i</li>
+                            <li class="letter row2">o</li>
+                            <li class="letter row2">p</li>
+                            <li class="letter row2">å</li>
+                            <li class="symbol row2">:</li>
+                            <li class="symbol row2 lastitem">?</li>
+                        </ul>
+                        <ul class="keyboard">
+                            <li class="capslock row3">Caps Lock</li>
+                            <li class="letter row3">a</li>
+                            <li class="letter row3">s</li>
+                            <li class="letter row3">d</li>
+                            <li class="letter row3">f</li>
+                            <li class="letter row3">g</li>
+                            <li class="letter row3">h</li>
+                            <li class="letter row3">j</li>
+                            <li class="letter row3">k</li>
+                            <li class="letter row3">l</li>
+                            <li class="letter row3">ö</li>
+                            <li class="letter row3">ä</li>
+                            <li class="return row3 lastitem" id="search">Sök</li>
+                        </ul>
+                        <ul class="keyboard">
+                            <li class="left-shift row4">Shift</li>
+                            <li class="letter row4">z</li>
+                            <li class="letter row4">x</li>
+                            <li class="letter row4">c</li>
+                            <li class="letter row4">v</li>
+                            <li class="letter row4">b</li>
+                            <li class="letter row4">n</li>
+                            <li class="letter row4">m</li>
+                            <li class="symbol row4">,</li>
+                            <li class="symbol row4">.</li>
+                            <li class="symbol row4">/</li>
+                            <li class="right-shift row4 lastitem">Shift</li>
+                        </ul>
+                        <ul class="keyboard">
+                            <li class="space row5 lastitem">&nbsp;</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-slider"></div>
+
+            
+
+		</div>            
+
+        <!--/ slider --> 
+ 
+        
+  <div class="footer">
+            <div class="footer-content">
+				<div class="footer-left-r">
+                </div>
+                <div class="footer-box-r">
+                    <img src="images/menu.png" alt="" border="0" />Language / Språk</div>
+                <div class="footer-right-r">
+                </div>
+                <div class="footer-left-r">
+                </div>
+                <div class="footer-left-r">
+                </div>
+                <div class="footer-box-r">
+                    <img src="images/red.png"  alt="" border="0" /><span id="recommended" type="text" >Rekommenderat</span></div>
+                <div class="footer-right-r">
+                </div>
+                <div class="footer-left-r">
+                </div>
+                <div class="footer-box-r">
+                    <img src="images/green.png"  alt="" border="0" /><span id="categories" type="text">Kategorier</span></div>
+                <div class="footer-right-r">
+                </div>
+                <div class="footer-left-r">
+                </div>
+                <div class="footer-box-r">
+                    <img src="images/yellow.png"  alt="" border="0" /><span id="channels" type="text">Kanaler & livesändningar</span></div>
+                <div class="footer-right-r">
+                </div>
+                <div class="footer-left-r">
+                </div>
+                <div class="footer-box-r">
+                    <img src="images/blue.png"  alt="" border="0" /><span id="searchshow" type="text" >Sök programtitlar</span></div>
+                <div class="footer-right-r"><h2></h2>
+                </div>
+            </div>
+        </div>
+
+<!--/ middle -->    
+
+</div>
+
+	</body>
+</html>
