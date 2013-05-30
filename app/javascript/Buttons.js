@@ -526,6 +526,7 @@ Buttons.handleMenuKeys = function(keyCode){
 			case tvKey.KEY_RETURN:
 				var urlpath = window.location.href;
 				var ifound = urlpath.indexOf('index.html');
+				alert("IFound" + ifound);
 				if(id == 6){
 					widgetAPI.blockNavigation(event); 
 					Language.show();
@@ -533,7 +534,7 @@ Buttons.handleMenuKeys = function(keyCode){
 				else if(ifound < 0){
 					alert("not index.html");
 					widgetAPI.blockNavigation(event); 
-					history.go(-1);
+					//history.go(-1);
 				}
 				break;
 			case tvKey.KEY_TOOLS:

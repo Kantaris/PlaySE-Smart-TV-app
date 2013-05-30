@@ -1,5 +1,4 @@
 var widgetAPI = new Common.API.Widget();
-var tvKey = new Common.API.TVKeyValue();
 var videoUrl = '';
 var isLeft = 1;
 var isPlaying = 0;
