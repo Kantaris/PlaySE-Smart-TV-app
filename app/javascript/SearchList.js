@@ -37,7 +37,7 @@ SearchList.setFired = function()
 
 SearchList.urldecode = function(str) {
    return decodeURIComponent((str+'').replace(/\+/g, '%20'));
-}
+};
 
 SearchList.Geturl=function(){
     var url = document.location.href;

@@ -1,15 +1,15 @@
 var timeout;
-var oldKeyHandle
+var oldKeyHandle = 0;
 var Search =
 {
    
-}
+};
 
 Search.init = function()
 {
 
     return true;
-}
+};
 
 Search.show = function()
 {
@@ -23,6 +23,6 @@ Search.show = function()
 	}
 	$(".filter-content").slideToggle(500, function() {});	
 
-}
+};
 
 

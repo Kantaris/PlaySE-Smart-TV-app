@@ -16,7 +16,7 @@ var mute = false;
 var Buttons =
 {
     
-}
+};
 Buttons.keyDown = function()
 {
 	if(id == 0){
@@ -63,11 +63,11 @@ Buttons.getCurrentChannelId = function(){
 
 Buttons.setKeyHandleID = function(iid){
 	id = iid;
-}
+};
 
 Buttons.getKeyHandleID = function(){
 	return id; 
-}
+};
 
 
 
@@ -90,7 +90,7 @@ Buttons.sscroll = function(param)
 	xaxis = -xaxis * 260;
 	$('.content-holder').animate({ marginLeft: xaxis}, 500 );
 	 
-}
+};
 
 Buttons.keyHandleForList = function()
 {
@@ -314,7 +314,7 @@ Buttons.keyHandleForSearch = function()
 	}
 	keys.eq(keyCount).addClass('selected');
 	alert(keyCount);
-	$('.keyboard').hide(0, function(){$(this).show()});
+	$('.keyboard').hide(0, function(){$(this).show();});
 	this.handleMenuKeys(keyCode);
 };
 
@@ -541,5 +541,5 @@ Buttons.handleMenuKeys = function(keyCode){
 				Language.show();
 				break;
 		}
-}
+};
 

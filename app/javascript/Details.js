@@ -131,7 +131,7 @@ Details.loadXml = function(){
         }
     });
 
-}
+};
 
 
 Details.startPlayer = function()
@@ -173,7 +173,7 @@ Details.startPlayer = function()
 				/* Return to windowed mode when video is stopped
 					(by choice or when it reaches the end) */
 			 //   Main.setWindowMode();
-			}
+			};
 
 			//Player.setVideoURL("http://svt10hls-lh.akamaihd.net/i/svt10hls_0@78142/master.m3u8?__b__=563&bkup=off"  + "|COMPONENT=HLS");
 			Player.setVideoURL(videoUrl + "|COMPONENT=HLS");

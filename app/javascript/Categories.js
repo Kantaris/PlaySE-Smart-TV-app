@@ -82,7 +82,7 @@ Categories.loadXml = function(){
         }
     });
 
-}
+};
 //window.location = 'categoryDetail.html?category=' + ilink + '&history=Kategorier/' + iname +'/';
 
 

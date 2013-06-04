@@ -13,7 +13,7 @@ var Player =
     PAUSED : 2,  
     FORWARD : 3,
     REWIND : 4
-}
+};
 
 Player.init = function()
 {
@@ -54,7 +54,7 @@ Player.init = function()
     this.plugin.OnBufferingComplete = 'Player.onBufferingComplete';           
             
     return success;
-}
+};
 
 Player.deinit = function()
 {
@@ -66,24 +66,24 @@ Player.deinit = function()
             mwPlugin.SetSource(this.originalSource);
             alert("Restore source to " + this.originalSource);
         }
-}
+};
 
 Player.setWindow = function()
 {
 	//this.plugin.SetDisplayArea(0, 0, 960, 540);
     this.plugin.SetDisplayArea(0, 0, 1, 1);
-}
+};
 
 Player.setFullscreen = function()
 {
     this.plugin.SetDisplayArea(0, 0, 960, 540);
-}
+};
 
 Player.setVideoURL = function(url)
 {
     this.url = url;
     alert("URL = " + this.url);
-}
+};
 
 Player.playVideo = function()
 {
@@ -104,7 +104,7 @@ Player.playVideo = function()
         this.plugin.Play( this.url );
         Audio.plugin.SetSystemMute(false);
     }
-}
+};
 
 Player.pauseVideo = function()
 {
@@ -116,7 +116,7 @@ Player.pauseVideo = function()
 
     this.state = this.PAUSED;
     this.plugin.Pause();
-}
+};
 
 Player.stopVideo = function()
 {
@@ -135,7 +135,7 @@ Player.stopVideo = function()
     {
         alert("Ignoring stop request, not in correct state");
     }
-}
+};
 
 Player.stopVideoNoCallback = function()
 {
@@ -150,14 +150,14 @@ Player.stopVideoNoCallback = function()
     {
         alert("Ignoring stop request, not in correct state");
     }
-}
+};
 
 Player.resumeVideo = function()
 {
     this.state = this.PLAYING;
     this.plugin.Resume();
 	this.hideControls();
-}
+};
 
 Player.skipForwardVideo = function()
 {
@@ -166,7 +166,7 @@ Player.skipForwardVideo = function()
     this.skipState = this.FORWARD;
     this.plugin.JumpForward(10); 
 	timeout = window.setTimeout(this.hideControls, 5000);
-}
+};
 
 Player.skipBackwardVideo = function()
 {
@@ -175,12 +175,12 @@ Player.skipBackwardVideo = function()
     this.skipState = this.REWIND;
     this.plugin.JumpBackward(10);
 	timeout = window.setTimeout(this.hideControls, 5000);
-}
+};
 
 Player.getState = function()
 {
     return this.state;
-}
+};
 
 // Global functions called directly by the player 
 
@@ -194,7 +194,7 @@ Player.onBufferingStart = function()
 	buff='Buffering';
 	}
 	$('.bottomoverlaybig').html(buff+': 0%');
-}
+};
 
 Player.onBufferingProgress = function(percent)
 {
@@ -207,7 +207,7 @@ Player.onBufferingProgress = function(percent)
   $('.bottomoverlaybig').css("display", "block");
   $('.bottomoverlaybig').html(buff+': ' + percent + '%');
 
-}
+};
 
 Player.onBufferingComplete = function()
 {
@@ -221,19 +221,19 @@ Player.onBufferingComplete = function()
 	this.setFullscreen();
 //	this.setWindow();
    //$('.loader').css("display", "none");
-}
+};
 
 Player.showControls = function(){
   $('.video-wrapper').css("display", "block");				
   $('.video-footer').css("display", "block");
 
-}
+};
 
 Player.hideControls = function(){
 	$('.video-wrapper').css("display", "none");				
 	$('.video-footer').css("display", "none");
 	$('.bottomoverlaybig').css("display", "none");
-}
+};
 
 Player.setCurTime = function(time)
 {
@@ -262,7 +262,7 @@ Player.setCurTime = function(time)
 	$('.progressempty').css("width", 960 - progress);
    // Display.setTime(time);
    this.setTotalTime();
-}
+};
 
 Player.setTotalTime = function()
 {
@@ -286,29 +286,29 @@ Player.setTotalTime = function()
 	
 	$('.totalTime').text(smins + ':' + ssecs);
     //Display.setTotalTime(Player.plugin.GetDuration());
-}
+};
 
 onServerError = function()
 {
-    Display.status("Server Error!");
-}
+    //Display.status("Server Error!");
+};
 
 OnNetworkDisconnected = function()
 {
-    Display.status("Network Error!");
-}
+    //Display.status("Network Error!");
+};
 
-getBandwidth = function(bandwidth) { alert("getBandwidth " + bandwidth); }
+getBandwidth = function(bandwidth) { alert("getBandwidth " + bandwidth); };
 
-onDecoderReady = function() { alert("onDecoderReady"); }
+onDecoderReady = function() { alert("onDecoderReady"); };
 
-onRenderError = function() { alert("onRenderError"); }
+onRenderError = function() { alert("onRenderError"); };
 
 stopPlayer = function()
 {
     Player.stopVideo();
-}
+};
 
-setTottalBuffer = function(buffer) { alert("setTottalBuffer " + buffer); }
+setTottalBuffer = function(buffer) { alert("setTottalBuffer " + buffer); };
 
-setCurBuffer = function(buffer) { alert("setCurBuffer " + buffer); }
+setCurBuffer = function(buffer) { alert("setCurBuffer " + buffer); };

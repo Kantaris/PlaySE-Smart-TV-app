@@ -4,7 +4,7 @@ var isSwedish=true;
 var Geofilter =
 {
    
-}
+};
 
 Geofilter.init = function()
 {

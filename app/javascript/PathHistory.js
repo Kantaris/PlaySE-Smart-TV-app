@@ -1,11 +1,11 @@
 var PathHistory =
 {
 
-}
+};
 
 PathHistory.urldecode = function(str) {
    return decodeURIComponent((str+'').replace(/\+/g, '%20'));
-}
+};
 
 PathHistory.GetPath = function(){
     var url = document.location.href;

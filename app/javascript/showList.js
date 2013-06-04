@@ -25,10 +25,10 @@ showList.onUnload = function()
 
 showList.Geturl=function(){
     var url = document.location.href;
-    var name=""
+    var name="";
     if (url.indexOf("=")>0)
     {
-        name = url.substring(url.indexOf("=")+1,url.indexOf("&"))
+        name = url.substring(url.indexOf("=")+1,url.indexOf("&"));
     }
     return name;
 };
@@ -101,7 +101,7 @@ showList.loadXml = function(){
         }
     });
 
-}
+};
 
 
 //window.location = 'project.html?ilink=' + ilink + '&history=' + historyPath + iname + '/';

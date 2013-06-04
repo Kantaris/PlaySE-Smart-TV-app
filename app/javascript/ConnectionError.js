@@ -4,7 +4,7 @@ var isSwedish=true;
 var ConnectionError =
 {
    
-}
+};
 
 ConnectionError.init = function()
 {

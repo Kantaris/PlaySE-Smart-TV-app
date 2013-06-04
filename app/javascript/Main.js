@@ -104,5 +104,5 @@ Main.loadXml = function(){
     });
 	
 	
-}
+};
 

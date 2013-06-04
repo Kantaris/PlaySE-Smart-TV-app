@@ -105,7 +105,7 @@ categoryDetail.loadXml = function(){
         }
     });
 
-}
+};
 
 
 //window.location = 'showList.html?name=' + ilink + '&history=' + historyPath + iname + '/';

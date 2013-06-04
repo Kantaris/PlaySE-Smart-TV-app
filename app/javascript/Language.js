@@ -4,7 +4,7 @@ var isSwedish=true;
 var Language =
 {
    
-}
+};
 
 Language.init = function()
 {
@@ -14,7 +14,7 @@ Language.init = function()
 
 Language.getisSwedish=function(){
 return isSwedish;
-}
+};
 
 Language.setLang = function(value){
 	var src="url(images/name.png)";//单引号，双引号都可以

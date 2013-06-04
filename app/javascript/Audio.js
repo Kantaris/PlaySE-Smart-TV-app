@@ -3,7 +3,7 @@ var timeout;
 var Audio =
 {
     plugin : null
-}
+};
 
 Audio.init = function()
 {
@@ -17,7 +17,7 @@ Audio.init = function()
     }
 
     return success;
-}
+};
 
 Audio.setRelativeVolume = function(delta)
 {
@@ -30,15 +30,15 @@ Audio.setRelativeVolume = function(delta)
 	$('.bottomoverlaybig').html('Volym: ' + this.getVolume() + '%');
 	timeout = window.setTimeout(this.hideControls, 5000);
 
-}
+};
 
 Audio.hideControls = function(){
 	$('.video-wrapper').css("display", "none");				
 	$('.video-footer').css("display", "none");
 	$('.bottomoverlaybig').css("display", "none");
-}
+};
 
 Audio.getVolume = function()
 {
     return this.plugin.GetVolume();
-}
+};
