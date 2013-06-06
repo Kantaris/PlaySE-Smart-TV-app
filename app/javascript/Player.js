@@ -295,7 +295,7 @@ onServerError = function()
 
 OnNetworkDisconnected = function()
 {
-    //Display.status("Network Error!");
+ //   Display.status("Network Error!");
 };
 
 getBandwidth = function(bandwidth) { alert("getBandwidth " + bandwidth); };
