@@ -1,6 +1,6 @@
 var tvKey = new Common.API.TVKeyValue();
 
-var id = 0; // list = 0, details = 1, player = 2, kanaler = 3, search = 4, player2 = 5, language = 6, blocked = 7, connection error = 8
+var index = 0; // list = 0, details = 1, player = 2, kanaler = 3, search = 4, player2 = 5, language = 6, blocked = 7, connection error = 8
 var fired = false;
 var itemSelected;
 
@@ -19,33 +19,33 @@ var Buttons =
 };
 Buttons.keyDown = function()
 {
-	if(id == 0){
+	if(index == 0){
 		this.keyHandleForList();
 	}
-	else if(id == 1)
+	else if(index == 1)
 	{
 		this.keyHandleForDetails();
 	}
-	else if(id == 2){
+	else if(index == 2){
 		this.keyHandleForPlayer();
 	}
-	else if(id == 3){
+	else if(index == 3){
 		this.keyHandleForKanaler();
 	}
-	else if(id == 4){
+	else if(index == 4){
 		this.keyHandleForSearch();
 	}
-	else if(id == 5){
+	else if(index == 5){
 		this.getCurrentChannelId();
 		this.keyHandleForPlayer2();
 	}
-	else if(id == 6){
+	else if(index == 6){
 		this.keyHandleForLanguage();
 	}
-	else if(id == 7){
+	else if(index == 7){
 		this.keyHandleForGeofilter();
 	}
-	else if(id == 8){
+	else if(index == 8){
 		this.keyHandleForConnectionError();
 	}
 };
@@ -62,11 +62,11 @@ Buttons.getCurrentChannelId = function(){
 };
 
 Buttons.setKeyHandleID = function(iid){
-	id = iid;
+	index = iid;
 };
 
 Buttons.getKeyHandleID = function(){
-	return id; 
+	return index; 
 };
 
 
@@ -526,7 +526,7 @@ Buttons.handleMenuKeys = function(keyCode){
 			case tvKey.KEY_RETURN:
 				var urlpath = window.location.href;
 				var ifound = urlpath.indexOf('index.html');
-				if(id == 6){
+				if(index == 6){
 					widgetAPI.blockNavigation(event); 
 					Language.show();
 				}
@@ -542,4 +542,3 @@ Buttons.handleMenuKeys = function(keyCode){
 				break;
 		}
 };
-
