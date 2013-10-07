@@ -1,4 +1,5 @@
 var timeout;
+var mute = false;
 
 var Audio =
 {
@@ -17,6 +18,17 @@ Audio.init = function()
     }
 
     return success;
+};
+
+Audio.toggleMute = function(){
+	if (mute == false){
+		this.plugin.SetUserMute(1);
+		mute = true;
+	}
+	else{
+		this.plugin.SetUserMute(0);
+		mute = false;
+	}
 };
 
 Audio.setRelativeVolume = function(delta)

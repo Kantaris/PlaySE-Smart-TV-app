@@ -9,7 +9,7 @@
 	<BigListIcon itemtype="string">95.png</BigListIcon>
 	<category itemtype="string"></category>
 	<autoUpdate itemtype="boolean">n</autoUpdate>
-	<ver itemtype="string">0.010</ver>
+	<ver itemtype="string">0.020</ver>
 	<mgrver itemtype="string"></mgrver>
 	<fullwidget itemtype="boolean">y</fullwidget>
 	<type itemtype="string">user</type>
@@ -19,7 +19,7 @@
 	<videomute itemtype="boolean">n</videomute>
 	<dcont itemtype="boolean">y</dcont>
 	<widgetname itemtype="string">Play SE</widgetname>
-	<description itemtype="string"></description>
+	<description itemtype="string">For SVT Play</description>
 	<width itemtype="number">960</width>
 	<height itemtype="number">540</height>
 	<author itemtype="group">

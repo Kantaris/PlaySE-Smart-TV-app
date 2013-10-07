@@ -15,11 +15,11 @@ Details.onLoad = function()
 
 	PathHistory.GetPath();
 	// Enable key event processing
-	language=Language.checkLanguage();
-	Language.setLang(language);
+	Language.setLang();
+	Resolution.displayRes();
 	Buttons.setKeyHandleID(1);					
 	Buttons.enableKeys();
-	this.GetPlayUrl();
+
 	
 	this.loadXml();
 };
@@ -52,12 +52,17 @@ Details.Geturl=function(){
 
 
 Details.GetPlayUrl = function(){
-	$.getJSON('http://www.svtplay.se' + this.Geturl() + '?output=json', function(data) {
+	var gurl = this.Geturl();
+	if(gurl.indexOf("http://") < 0){
+		gurl = 'http://www.svtplay.se' + gurl;
+	}
+	$.getJSON(gurl + '?output=json', function(data) {
 		
 		$.each(data, function(key, val) {
 			if(key == 'video'){
 				alert(val.videoReferences[1].url);
 				videoUrl = val.videoReferences[1].url;
+				Resolution.getCorrectStream(videoUrl);
 			}
 		});
 		
@@ -176,8 +181,8 @@ Details.startPlayer = function()
 			};
 
 			//Player.setVideoURL("http://svt10hls-lh.akamaihd.net/i/svt10hls_0@78142/master.m3u8?__b__=563&bkup=off"  + "|COMPONENT=HLS");
-			Player.setVideoURL(videoUrl + "|COMPONENT=HLS");
-			Player.playVideo();
+			this.GetPlayUrl();
+
 			isPlaying = 1;
 			
 		}

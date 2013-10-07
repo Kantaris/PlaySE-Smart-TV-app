@@ -13,8 +13,8 @@ var Main =
 Main.onLoad = function()
 {
 	widgetAPI.sendReadyEvent();
-	language=Language.checkLanguage();
-	Language.setLang(language);
+	Language.setLang();
+	Resolution.displayRes();
 	this.loadXml();	
 	// Enable key event processing
 	Buttons.enableKeys();
@@ -49,16 +49,7 @@ Main.loadXml = function(){
 					var Live = $video.find('Live').text();
 					var starttime = $video.find('Startime').text();
 					var html;
-					if(Language.getisSwedish()){//
-						alert('swedish');
-						$('#swedish').addClass('checked');
-						$('#english').removeClass('checked');
-					}
-					else{
-						alert('english');
-						$('#english').addClass('checked');
-						$('#swedish').removeClass('checked');
-					}
+					
 					if(itemCounter % 2 == 0){
 						if(itemCounter > 0){
 							html = '<div class="scroll-content-item topitem">';

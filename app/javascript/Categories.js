@@ -9,8 +9,8 @@ var Categories =
 
 Categories.onLoad = function()
 {
-	language=Language.checkLanguage();
-	Language.setLang(language);
+	Language.setLang();
+	Resolution.displayRes();
 	this.loadXml();
 
 	Buttons.enableKeys();

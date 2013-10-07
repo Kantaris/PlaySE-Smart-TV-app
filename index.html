@@ -6,14 +6,15 @@
      <!-- TODO : Style sheets code -->
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
     <!-- TODO : Common API -->
-    <script type="text/javascript" src= "Common/API/Widget.js"></script>
-    <script type="text/javascript"  src="Common/API/TVKeyValue.js"></script>
+    <script type="text/javascript" src= "$MANAGER_WIDGET/Common/API/Widget.js"></script>
+    <script type="text/javascript"  src="$MANAGER_WIDGET/Common/API/TVKeyValue.js"></script>
     <script type="text/javascript" src="$MANAGER_WIDGET/Common/jquery.js"></script>
     <!-- js/jquery.min.js -->
     <!-- TODO : Javascript code -->
     <script type="text/javascript" src="app/javascript/Buttons.js"></script>
     <script type="text/javascript" src="app/javascript/Search.js"></script>
 	<script type="text/javascript" src="app/javascript/Language.js"></script>
+	<script type="text/javascript" src="app/javascript/Resolution.js"></script>
 	<script type="text/javascript" src="app/javascript/ConnectionError.js"></script>
 	<script type="text/javascript" src="app/javascript/Main.js"></script>
    
@@ -28,7 +29,7 @@
             <div class="header">
                 <div class="logo">
                     <a href="index.html">
-                        <img src="images/weeb2.png" alt="" border="0" /></a> Version: 0.1.1</div>
+                        <img src="images/weeb2.png" alt="" border="0" /></a> Version: 0.2.0</div>
                 <div class="socials">
                     <p>
                         <a href="#" class="social-fb" id="companyName">Utvecklad av Christofer Persson åt Kantaris Co.Ltd</a></p>
@@ -46,11 +47,32 @@
 
                         <ul>
 
-                            <li class="title"><a href="#">Language / Språk:</a></li>
+                            <li class="title stitle"><a href="#">Language / Språk:</a></li>
 
-                            <li id="english" class="selected"><a href="#">English</a></li>
+                            <li id="english" class="unselected"><a href="#">English</a></li>
 
                             <li id="swedish" class="checked unselected"><a href="#">Svenska</a></li>
+
+                        </ul>
+
+                </div>
+                <div class="res-content">
+
+                        <ul>
+
+                            <li class="title"><a href="#">Resolution / Upplösning:</a></li>
+
+							<li id="resauto" class="unselected"><a href="#">Auto</a></li>
+							
+                            <li id="res1" class="unselected"><a href="#">256x144</a></li>
+
+                            <li id="res2" class="unselected"><a href="#">512x288</a></li>
+                            
+                            <li id="res3" class="unselected"><a href="#">768x432</a></li>
+                            
+                            <li id="res4" class="unselected"><a href="#">1024x576</a></li>
+                             
+                            <li id="res5" class="unselected"><a href="#">1280x720</a></li>
 
                         </ul>
 
@@ -162,7 +184,7 @@
 				<div class="footer-left-r">
                 </div>
                 <div class="footer-box-r">
-                    <img src="images/menu.png" alt="" border="0" />Language / Språk</div>
+                    <img src="images/menu.png" alt="" border="0" />Inställningar / Settings</div>
                 <div class="footer-right-r">
                 </div>
                 <div class="footer-left-r">

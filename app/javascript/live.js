@@ -13,8 +13,8 @@ var live =
 
 live.onLoad = function()
 {
-	language=Language.checkLanguage();
-	Language.setLang(language);
+	Language.setLang();
+	Resolution.displayRes();
 	this.getJson();
 	
 	//this.loadXml();

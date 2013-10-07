@@ -5,6 +5,7 @@ var isPlaying = 0;
 var nowPlaying;
 var spinner;
 var language;
+
 var Kanaler =
 {
 	selectedVideo : 0,
@@ -24,13 +25,15 @@ var Kanaler =
 Kanaler.onLoad = function()
 {
 	// Enable key event processing
-	alert("2012 test1");
-	language=Language.checkLanguage();
-	alert("2012 test2");
-	Language.setLang(language);
+	Language.setLang();
+	Resolution.displayRes();
 	Buttons.setKeyHandleID(3);					
 	Buttons.enableKeys();
-	this.GetPlayUrl();
+	var url = document.location.href;
+	if (url.indexOf("direct=")>0)
+	{
+		Kanaler.startPlayer();
+	}
 	PathHistory.GetPath();
 	this.loadXml();
 	
@@ -99,8 +102,7 @@ Kanaler.startPlayer = function()
 			};
 
 			//Player.setVideoURL("http://svt10hls-lh.akamaihd.net/i/svt10hls_0@78142/master.m3u8?__b__=563&bkup=off"  + "|COMPONENT=HLS");
-			Player.setVideoURL(videoUrl + "|COMPONENT=HLS");
-			Player.playVideo();
+			this.GetPlayUrl();
 			isPlaying = 1;
 			
 			
@@ -117,11 +119,8 @@ Kanaler.GetPlayUrl = function(){
 				//videoUrl = 'http://kantaris.hemsida.eu/?mode=native&url=http://svt10hls-lh.akamaihd.net/i/svt10hls_0@78142/index_3_av-p.m3u8?sd=10&rebase=on&e=1';
 				//videoUrl = 'http://kantaris.hemsida.eu/?mode=native&url=' + val.videoReferences[1].url;
 				videoUrl = val.videoReferences[1].url;
-				var url = document.location.href;
-				if (url.indexOf("direct=")>0)
-				{
-					Kanaler.startPlayer();
-				}
+				videoUrl = Resolution.getCorrectStream(videoUrl);
+				
 			}
 		});
 		

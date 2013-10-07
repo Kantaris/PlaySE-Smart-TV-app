@@ -23,6 +23,10 @@ a.link-button2, a.link-button4.selected, .btn-submit, .short-title a:hover, a:ho
 .language-content .checked a{ 
  background:url(../images/green_icon_check.png) 68px 4px no-repeat;
 }
+
+.res-content .checked a{ 
+ background:url(../images/green_icon_check.png) 68px 4px no-repeat;
+}
 	
 .loader
 {
@@ -1206,8 +1210,20 @@ list-style: none;
 	border-color: #e5e5e5;
 	cursor: pointer;
 }
-
-.slider-language, .slider-blocked, .slider-error {
+.slider-language{
+	height:70px;
+	position:fixed;
+	width:100%;
+	top:62px;
+	left:0;
+	z-index:200;
+	display:none;
+	background:url(../images/filter_bg.jpg) repeat-x;
+    background-size: 100%;
+	
+	
+}
+.slider-blocked, .slider-error {
 	height:35px;
 	position:fixed;
 	width:100%;
@@ -1225,12 +1241,34 @@ list-style: none;
 	color:#232323;
 	padding-top:7px;
 	height:35px;}
+	
+.res-content{
+	text-align:center;
+	font-family:'Folks-Normal', Arial, sans-serif;
+	font-size:12px;
+	text-transform:uppercase;
+	color:#232323;
+	height:35px;}
 
 .language-content ul {
 	margin:0 auto;
 	width:320px}
+	
+.res-content ul {
+	margin:0 auto;
+	width:740px}
 
 .language-content li {
+	margin-left:5px;
+	display:block;
+	float:left;
+	font-size:11px;
+	height:21px;
+	line-height:21px;
+	text-align:left;
+}
+
+.res-content li {
 	margin-left:5px;
 	display:block;
 	float:left;
@@ -1276,6 +1314,14 @@ list-style: none;
 	height:21px;
 }
 
+.res-content a {
+	color:#4b5257;
+	display:block;
+	width:79px;
+	padding-left:7px;
+	height:21px;
+}
+
 .blocked-content a {
 	color:#4b5257;
 	display:block;
@@ -1294,6 +1340,19 @@ list-style: none;
 
 .language-content .title a {
 	width:120px;
+	color:#4b5257;
+	display:block;
+	padding-left:7px;
+	height:21px;
+
+}
+
+.stitle {
+	border-bottom: 1px solid #5FB932;
+}
+
+.res-content .title a {
+	width:160px;
 	color:#4b5257;
 	display:block;
 	padding-left:7px;
@@ -1325,6 +1384,12 @@ list-style: none;
 .language-content .selected {
 	background:url(../images/filter_button_u.gif) 0 0 no-repeat;}
 	
+.res-content .unselected {
+	background:url(../images/filter_button.gif) 0 0 no-repeat;}
+
+.res-content .selected {
+	background:url(../images/filter_button_u.gif) 0 0 no-repeat;}
+	
 .blocked-content .selected {
 	background:url(../images/filter_button_u.gif) 0 0 no-repeat;}
 	
@@ -1335,4 +1400,10 @@ list-style: none;
 	color:#acb4b8}
 
 .language-content a:hover {
+	color:#acb4b8}
+	
+.res-content .checked a {
+	color:#acb4b8}
+
+.res-content a:hover {
 	color:#acb4b8}

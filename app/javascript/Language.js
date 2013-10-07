@@ -16,9 +16,13 @@ Language.getisSwedish=function(){
 return isSwedish;
 };
 
-Language.setLang = function(value){
-	var src="url(images/name.png)";//单引号，双引号都可以
+Language.setLang = function(){
+	var value = this.checkLanguage();
+	var src="url(images/name.png)";
 	if(value == 'English'){
+		$('#english').addClass('checked');
+		$('#swedish').removeClass('checked');
+
 		src="url(images/name-english.png)";
 		$("#recommended").text('Recommended');
 		$("#categories").text('Categories');
@@ -40,7 +44,10 @@ Language.setLang = function(value){
 		isSwedish=false;
 		
 	}else {
-		
+
+		$('#swedish').addClass('checked');
+		$('#english').removeClass('checked');
+
 		$("#recommended").text('Rekommenderat');
 		$("#categories").text('Kategorier');
 		$("#channels").text('Kanaler & livesändningar');

@@ -12,7 +12,8 @@ var first = true;
 var channels = ['svt1', 'svt2', 'svt24', 'barnkanalen', 'kunskapskanalen'];
 var channelId = 0;
 var isLeft = 1;
-var mute = false;
+var langmenu = true;
+var resButton = ["#resauto", "#res1", "#res2", "#res3", "#res4", "#res5"];
 var Buttons =
 {
     
@@ -186,36 +187,92 @@ Buttons.keyHandleForDetails = function()
 Buttons.keyHandleForLanguage = function()
 {
 	var keyCode = event.keyCode;
-	switch(keyCode)
-	{
-		case tvKey.KEY_LEFT:
-		isLeft = 1;
-		$('#english').addClass('selected');
-		$('#english').removeClass('unselected');
-		$('#swedish').addClass('unselected');
-		$('#swedish').removeClass('selected');
-		break;
-		case tvKey.KEY_RIGHT:
-		isLeft = 0;
-		$('#swedish').addClass('selected');
-		$('#swedish').removeClass('unselected');
-		$('#english').addClass('unselected');
-		$('#english').removeClass('selected');
-		break;
-		case tvKey.KEY_ENTER:
-		case tvKey.KEY_PANEL_ENTER:
-			alert("enter");
-			if(isLeft == 0){//0 replace is not left
-				$('#swedish').addClass('checked');
-				$('#english').removeClass('checked');
-				Language.setLang('Swedish');
-			}
-			else{
-				$('#english').addClass('checked');
-				$('#swedish').removeClass('checked');
-				Language.setLang('English');
-			}
+	if(langmenu){
+		switch(keyCode)
+		{
+			case tvKey.KEY_LEFT:
+			isLeft = 1;
+			$('#english').addClass('selected');
+			$('#english').removeClass('unselected');
+			$('#swedish').addClass('unselected');
+			$('#swedish').removeClass('selected');
 			break;
+			case tvKey.KEY_RIGHT:
+			isLeft = 0;
+			$('#swedish').addClass('selected');
+			$('#swedish').removeClass('unselected');
+			$('#english').addClass('unselected');
+			$('#english').removeClass('selected');
+			break;
+			case tvKey.KEY_ENTER:
+			case tvKey.KEY_PANEL_ENTER:
+				alert("enter");
+				if(isLeft == 0){//0 replace is not left
+					$('#swedish').addClass('checked');
+					$('#english').removeClass('checked');
+					Language.setLang('Swedish');
+				}
+				else{
+					$('#english').addClass('checked');
+					$('#swedish').removeClass('checked');
+					Language.setLang('English');
+				}
+				break;
+			case tvKey.KEY_DOWN:
+				langmenu = false;
+				$('.res-content .title').addClass('stitle');
+				$('.language-content .title').removeClass('stitle');
+				break;
+		}
+		
+	}
+	else{
+		var ri = 0;
+		var cSel = -1;
+		for(ri = 0; ri < resButton.length; ri++){
+			if($(resButton[ri]).hasClass('selected')){
+				$(resButton[ri]).addClass('unselected');
+				$(resButton[ri]).removeClass('selected');
+				cSel = ri;
+			}
+		}
+		alert(cSel);
+		switch(keyCode)
+		{
+			case tvKey.KEY_RIGHT:
+				
+				cSel++;
+				if(cSel < resButton.length){
+					$(resButton[cSel]).addClass('selected');
+					$(resButton[cSel]).removeClass('unselected');
+				}
+				break;
+			case tvKey.KEY_LEFT:
+				cSel--;
+				if(cSel >= 0){
+					$(resButton[cSel]).addClass('selected');
+					$(resButton[cSel]).removeClass('unselected');
+				}
+				break;
+			case tvKey.KEY_ENTER:
+			case tvKey.KEY_PANEL_ENTER:
+				alert("enter");
+				var rj = 0;
+				for(rj = 0; rj < resButton.length; rj++){
+					if($(resButton[rj]).hasClass('checked')){
+						$(resButton[rj]).removeClass('checked');
+					}
+				}
+				$(resButton[cSel]).addClass('checked');
+				Resolution.setRes(cSel);
+				
+				break;
+			case tvKey.KEY_UP:
+				langmenu = true;
+				$('.language-content .title').addClass('stitle');
+				$('.res-content .title').removeClass('stitle');
+				break;
+		}
 		
 	}
 	this.handleMenuKeys(keyCode);
@@ -352,9 +409,6 @@ Buttons.keyHandleForPlayer2 = function(){
 		var keyCode = event.keyCode;
 	switch(keyCode)
 		{
-			case tvKey.KEY_RW:
-				Player.skipBackwardVideo();
-				break;
 			case tvKey.KEY_PAUSE:
 				Player.pauseVideo();
 				break;
@@ -414,16 +468,12 @@ Buttons.keyHandleForPlayer2 = function(){
 					window.location = 'kanaler.html?ilink=kanaler/' + channels[channelId] + '&history=Kanaler/' + channels[channelId] + '/&direct=1';
 				}
 				break;
+			case tvKey.KEY_INFO:
+				Player.showInfo();
+				break;
 			 case tvKey.KEY_MUTE:
-				if (mute == false){
-					Audio.plugin.SetSystemMute(true);
-					mute = true;
-				}
-				else{
-					Audio.plugin.SetSystemMute(false);
-					mute = false;
-				}
-			 break;
+				Audio.toggleMute();
+				break;
 			}
 };
 Buttons.keyHandleForPlayer = function(){
@@ -438,6 +488,7 @@ Buttons.keyHandleForPlayer = function(){
 				break;
 			case tvKey.KEY_FF:
 				Player.skipForwardVideo();
+				break;
 			case tvKey.KEY_PLAY:
 				Player.resumeVideo();
 				break;
@@ -464,15 +515,12 @@ Buttons.keyHandleForPlayer = function(){
 				widgetAPI.blockNavigation(event); 
 				Player.stopVideo();
 				break;
+			case tvKey.KEY_INFO:
+				Player.showInfo();
+				break;
 			case tvKey.KEY_MUTE:
-				if (mute == false){
-					Audio.plugin.SetSystemMute(true);
-					mute = true;
-				}
-				else{
-					Audio.plugin.SetSystemMute(false);
-					mute = false;
-				}
+				Audio.toggleMute();
+				break;
 			 break;
 		}
 };

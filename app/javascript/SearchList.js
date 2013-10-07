@@ -12,7 +12,8 @@ var SearchList =
 
 SearchList.onLoad = function()
 {
-	
+	Language.setLang();
+	Resolution.displayRes();
 	this.loadXml();
 	
 	// Enable key event processing

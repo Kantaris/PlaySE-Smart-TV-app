@@ -9,7 +9,8 @@ var showList =
 
 showList.onLoad = function()
 {
-
+	Language.setLang();
+	Resolution.displayRes();
 	this.loadXml();
 	PathHistory.GetPath();
 	// Enable key event processing
