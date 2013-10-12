@@ -107,7 +107,7 @@ Player.playVideo = function()
         this.plugin.SetPendingBuffer(640*1024); 
        
         this.plugin.Play( this.url );
-        Audio.plugin.SetSystemMute(false);
+        Audio.plugin.SetUserMute(false);
     }
 };
 
