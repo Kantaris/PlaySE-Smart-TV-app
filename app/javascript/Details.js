@@ -5,6 +5,7 @@ var spinner;
 var buff;
 var nowPlaying;
 var language;
+var gurl = "";
 var Details =
 {
 
@@ -52,7 +53,7 @@ Details.Geturl=function(){
 
 
 Details.GetPlayUrl = function(){
-	var gurl = this.Geturl();
+	gurl = this.Geturl();
 	if(gurl.indexOf("http://") < 0){
 		gurl = 'http://www.svtplay.se' + gurl;
 	}
@@ -62,7 +63,15 @@ Details.GetPlayUrl = function(){
 			if(key == 'video'){
 				alert(val.videoReferences[1].url);
 				videoUrl = val.videoReferences[1].url;
-				Resolution.getCorrectStream(videoUrl);
+				if(videoUrl.indexOf('.m3u8') >= 0){
+					Resolution.getCorrectStream(videoUrl);
+				}
+				else{
+					
+					gurl = gurl + '?type=embed';
+					alert(gurl);
+					widgetAPI.runSearchWidget('29_fullbrowser', gurl);
+				}
 			}
 		});
 		
