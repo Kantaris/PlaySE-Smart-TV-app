@@ -61,10 +61,18 @@ Details.GetPlayUrl = function(){
 		
 		$.each(data, function(key, val) {
 			if(key == 'video'){
-				alert(val.videoReferences[1].url);
-				videoUrl = val.videoReferences[1].url;
+				
+				for (var i = 0; i < videoReferences.length; i++) {
+				    alert(myStringArray[i]);
+				    alert(val.videoReferences[i].url);
+				    videoUrl = val.videoReferences[1].url;
+				    if(videoUrl.indexOf('.m3u8') >= 0){
+				    	break;
+				    }
+				}
+
 				if(videoUrl.indexOf('.m3u8') >= 0){
-					Resolution.getCorrectStream(videoUrl);
+					 Resolution.getCorrectStream(videoUrl);
 				}
 				else{
 					

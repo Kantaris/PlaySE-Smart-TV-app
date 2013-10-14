@@ -67,6 +67,7 @@ SearchList.sscroll = function(param)
 
 SearchList.loadXml = function(){
 	$.support.cors = true;
+	alert('http://188.40.102.5/Search.ashx?sok='+this.Geturl());
 	 $.ajax(
     {
         type: 'GET',

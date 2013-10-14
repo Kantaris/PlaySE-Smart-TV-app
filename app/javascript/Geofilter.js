@@ -24,6 +24,8 @@ Geofilter.show = function()
 	else{
 		Buttons.setKeyHandleID(oldKeyHandle);
 	}
+	$("#playButton").css("display", "none");
+	$("#backButton").css("display", "none");
 	$(".slider-blocked").slideToggle(500, function() {});	
 
 };
