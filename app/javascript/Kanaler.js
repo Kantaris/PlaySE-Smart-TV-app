@@ -140,6 +140,8 @@ Kanaler.loadXml = function(){
         type: 'GET',
         url: url,
 		timeout: 15000,
+		tryCount : 0,
+	    retryLimit : 3,
         success: function(data)
         {
             alert('Success');
@@ -187,8 +189,19 @@ Kanaler.loadXml = function(){
    },
         error: function(XMLHttpRequest, textStatus, errorThrown)
         {
-            alert('Failure');
-			ConnectionError.show();
+          	if (textStatus == 'timeout') {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    //try again
+                    $.ajax(this);
+                    return;
+                }            
+                return;
+            }
+        	else{
+        		alert('Failure');
+        		ConnectionError.show();
+        	}
          
         }
     });

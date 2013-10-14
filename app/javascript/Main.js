@@ -34,6 +34,8 @@ Main.loadXml = function(){
     {
         type: 'GET',
         url: 'http://188.40.102.5/recommended.ashx',
+        tryCount : 0,
+        retryLimit : 3,
 		timeout: 15000,
         success: function(data)
         {
@@ -88,8 +90,19 @@ Main.loadXml = function(){
         },
         error: function(XMLHttpRequest, textStatus, errorThrown)
         {
-            alert('Failure');
-			ConnectionError.show();
+          	if (textStatus == 'timeout') {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    //try again
+                    $.ajax(this);
+                    return;
+                }            
+                return;
+            }
+        	else{
+        		alert('Failure');
+        		ConnectionError.show();
+        	}
          
         }
     });
