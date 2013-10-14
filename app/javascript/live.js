@@ -78,11 +78,6 @@ live.getJson = function(){
 		       
 		        $(data).find('video').each(function(){
 				
-					//var src="url(images/name.png)";//background:url(../images/name-english.png) 0 0 no-repeat
-					var language=Language.checkLanguage();
-					Language.setLang(language);
-					
-					//
 		            var $video = $(this); 
 		            var Name = $video.find('Name').text();
 					var Link = $video.find('Link').text();

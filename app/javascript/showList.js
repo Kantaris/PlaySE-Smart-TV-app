@@ -52,9 +52,6 @@ showList.loadXml = function(){
 	
        
         $(data).find('Episode').each(function(){
-
-			var language=Language.checkLanguage();
-			Language.setLang(language);
 			
             var $video = $(this); 
             var Name = $video.find('Name').text();

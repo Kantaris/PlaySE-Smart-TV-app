@@ -57,9 +57,7 @@ categoryDetail.loadXml = function(){
             alert('Success');
         $(data).find('video').each(function(){
 		
-			var language=Language.checkLanguage();
-			Language.setLang(language);
-			
+		
             var $video = $(this); 
             var Name = $video.find('Name').text();
 			var Link = $video.find('Link').text();
