@@ -24,10 +24,26 @@ Audio.toggleMute = function(){
 	if (mute == false){
 		this.plugin.SetUserMute(1);
 		mute = true;
+		var pp;
+		if(Language.getisSwedish()){
+			pp='Volym: Tyst';
+		}else{
+			pp='Volume: Mute';
+		}
+		$('.bottomoverlaybig').html(pp);
+		timeout = window.setTimeout(this.hideControls, 5000);
 	}
 	else{
 		this.plugin.SetUserMute(0);
 		mute = false;
+		var pp;
+		if(Language.getisSwedish()){
+			pp='Volym: ';
+		}else{
+			pp='Volume: ';
+		}
+		$('.bottomoverlaybig').html(pp + this.getVolume() + '%');
+		timeout = window.setTimeout(this.hideControls, 5000);
 	}
 };
 
@@ -39,7 +55,13 @@ Audio.setRelativeVolume = function(delta)
 	$('.video-wrapper').css("display", "block");				
 	$('.video-footer').css("display", "block");
 	$('.bottomoverlaybig').css("display", "block");
-	$('.bottomoverlaybig').html('Volym: ' + this.getVolume() + '%');
+	var pp;
+	if(Language.getisSwedish()){
+		pp='Volym: ';
+	}else{
+		pp='Volume: ';
+	}
+	$('.bottomoverlaybig').html(pp + this.getVolume() + '%');
 	timeout = window.setTimeout(this.hideControls, 5000);
 
 };
