@@ -62,10 +62,9 @@ Details.GetPlayUrl = function(){
 		$.each(data, function(key, val) {
 			if(key == 'video'){
 				
-				for (var i = 0; i < videoReferences.length; i++) {
-				    alert(myStringArray[i]);
+				for (var i = 0; i < val.videoReferences.length; i++) {
 				    alert(val.videoReferences[i].url);
-				    videoUrl = val.videoReferences[1].url;
+				    videoUrl = val.videoReferences[i].url;
 				    if(videoUrl.indexOf('.m3u8') >= 0){
 				    	break;
 				    }
