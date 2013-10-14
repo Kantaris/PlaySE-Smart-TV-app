@@ -134,8 +134,10 @@ Buttons.keyHandleForList = function()
 				}
 				break;
 			case tvKey.KEY_DOWN:
-				itemSelected.removeClass('selected');
-				itemSelected = bottomItems.eq(columnCounter).addClass('selected');
+				if(bottomItems.eq(columnCounter) != null){
+					itemSelected.removeClass('selected');
+					itemSelected = bottomItems.eq(columnCounter).addClass('selected');
+				}
 				break;
 			case tvKey.KEY_UP:				
 				itemSelected.removeClass('selected');
