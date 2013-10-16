@@ -22,6 +22,9 @@ PathHistory.GetPath = function(){
 		while(parse.indexOf("/")>0){
 			title = parse.substring(0, parse.indexOf("/"));
 			title = this.urldecode(title);
+			if(title.length > 30){
+				title = title.substring(0, 30)+ "...";
+			}
 			parse = parse.substring(parse.indexOf("/") + 1 , parse.length);
 			html +='<li class="root-item"><a href="index.html" class="active">' + title + '</a></li>';
 		}
