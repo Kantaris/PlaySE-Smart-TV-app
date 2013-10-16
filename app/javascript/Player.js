@@ -3,6 +3,8 @@ var skipTime = 0;
 var timeoutS;
 var pluginAPI;
 var ccTime = 0;
+var lastPos = 0;
+var videoUrl;
 
 var Player =
 {
@@ -58,6 +60,7 @@ Player.init = function()
     this.plugin.OnBufferingComplete = 'Player.onBufferingComplete';           
     this.plugin.OnRenderingComplete  = 'Player.onRenderingComplete'; 
     this.plugin.OnNetworkDisconnected = 'Player.OnNetworkDisconnected';
+    this.plugin.OnConnectionFailed = 'Player.OnNetworkDisconnected';
     return success;
 };
 
@@ -86,13 +89,13 @@ Player.setFullscreen = function()
 
 Player.setVideoURL = function(url)
 {
-    this.url = url;
-    alert("URL = " + this.url);
+    videoUrl = url;
+    alert("URL = " + url);
 };
 
 Player.playVideo = function()
 {
-    if (this.url == null)
+    if (videoUrl == null)
     {
         alert("No videos to play");
     }
@@ -106,7 +109,7 @@ Player.playVideo = function()
         this.plugin.SetInitialBuffer(640*1024);
         this.plugin.SetPendingBuffer(640*1024); 
        
-        this.plugin.Play( this.url );
+        this.plugin.Play( videoUrl );
         Audio.plugin.SetUserMute(false);
     }
 };
@@ -158,8 +161,19 @@ Player.stopVideoNoCallback = function()
 
 Player.resumeVideo = function()
 {
+	//this.plugin.ResumePlay(vurl, time);
     this.state = this.PLAYING;
     this.plugin.Resume();
+	this.hideControls();
+};
+
+Player.reloadVideo = function()
+{
+	this.plugin.Stop();
+	lastPos = Math.floor(ccTime / 1000.0);
+	this.plugin.ResumePlay(videoUrl, lastPos);
+	alert("video reloaded. url = " + videoUrl + "pos " + lastPos );
+    this.state = this.PLAYING;
 	this.hideControls();
 };
 
@@ -355,6 +369,32 @@ Player.OnNetworkDisconnected = function()
 	this.showControls();
 	$('.bottomoverlaybig').css("display", "block");
 	$('.bottomoverlaybig').html('Network Error!');
+	// just to test the network so that we know when to resume
+	 $.ajax(
+			    {
+			        type: 'GET',
+			        url: 'http://188.40.102.5/recommended.ashx',
+					timeout: 10000,
+			        success: function(data)
+			        {
+			        	
+			        	var $entries = $(data).find('video');
 
+			        	if ($entries.length > 0) {
+			        		alert('Success');
+			        		Player.reloadVideo();
+			        	}
+			        	else{
+			        		alert('Failure');
+			        		$.ajax(this);
+			        	}
+			        },
+			        error: function(XMLHttpRequest, textStatus, errorThrown)
+			        {
+			        		alert('Failure');
+			        		$.ajax(this);
+         
+			        }
+			    });
 };
 

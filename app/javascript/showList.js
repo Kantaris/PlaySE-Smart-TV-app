@@ -31,6 +31,7 @@ showList.Geturl=function(){
     {
         name = url.substring(url.indexOf("=")+1,url.indexOf("&"));
     }
+    alert(name);
     return name;
 };
 
