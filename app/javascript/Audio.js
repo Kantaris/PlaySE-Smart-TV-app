@@ -24,6 +24,10 @@ Audio.toggleMute = function(){
 	if (mute == false){
 		this.plugin.SetUserMute(1);
 		mute = true;
+		window.clearTimeout(timeout);
+		$('.video-wrapper').css("display", "block");				
+		$('.video-footer').css("display", "block");
+		$('.bottomoverlaybig').css("display", "block");
 		var pp;
 		if(Language.getisSwedish()){
 			pp='Volym: Tyst';
@@ -36,6 +40,10 @@ Audio.toggleMute = function(){
 	else{
 		this.plugin.SetUserMute(0);
 		mute = false;
+		window.clearTimeout(timeout);
+		$('.video-wrapper').css("display", "block");				
+		$('.video-footer').css("display", "block");
+		$('.bottomoverlaybig').css("display", "block");
 		var pp;
 		if(Language.getisSwedish()){
 			pp='Volym: ';

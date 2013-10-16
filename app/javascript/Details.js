@@ -127,6 +127,9 @@ Details.loadXml = function(){
 					}
 				);
 			}
+			if(Name.length > 47){
+				Name = Name.substring(0, 47)+ "...";
+			}
 			$('.topoverlaybig').html(nowPlaying+': ' + Name);////
 			var html = '<div class="project-text">';
 		        html+='<div class="project-name">';

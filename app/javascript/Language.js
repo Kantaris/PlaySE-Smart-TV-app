@@ -18,6 +18,7 @@ return isSwedish;
 
 Language.setLang = function(){
 	var value = this.checkLanguage();
+	alert(value);
 	var src="url(images/name.png)";
 	if(value == 'English'){
 		$('#english').addClass('checked');
@@ -67,8 +68,7 @@ Language.setLang = function(){
 	}
 	
 	document.getElementById("companyName").style.backgroundImage=src;
-		
-	this.setLanguage(value);
+
 };
 
 

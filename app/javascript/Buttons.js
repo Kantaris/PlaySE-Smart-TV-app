@@ -212,12 +212,14 @@ Buttons.keyHandleForLanguage = function()
 				if(isLeft == 0){//0 replace is not left
 					$('#swedish').addClass('checked');
 					$('#english').removeClass('checked');
-					Language.setLang('Swedish');
+					Language.setLanguage('Swedish');
+					Language.setLang();
 				}
 				else{
 					$('#english').addClass('checked');
 					$('#swedish').removeClass('checked');
-					Language.setLang('English');
+					Language.setLanguage('English');
+					Language.setLang();
 				}
 				break;
 			case tvKey.KEY_DOWN:
