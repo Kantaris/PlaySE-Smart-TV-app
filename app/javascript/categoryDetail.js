@@ -66,6 +66,7 @@ categoryDetail.loadXml = function(){
 			alert(Link);
 			
 			var ImgLink  = $video.find('ImgLink').text();
+                        ImgLink = ImgLink.replace("/medium/", "/small/");
 			var html;
 			if(itemCounter % 2 == 0){
 				if(itemCounter > 0){

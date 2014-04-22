@@ -1089,6 +1089,17 @@ small {
 	background:url(../images/searchback.jpg) repeat-x;
 	height:335px;}
 
+.imefilter-content {
+	position:absolute;
+	text-align:center;
+	font-family:'Folks-Normal', Arial, sans-serif;
+	font-size:12px;
+	color:#232323;
+	padding-top:7px;
+	width:960px;
+	background:url(../images/searchback.jpg) repeat-x;
+	height:100px;}
+
 .input_bg 
 {
 	margin: 10px auto;
@@ -1127,6 +1138,23 @@ margin-left: 12px;
 .filter-content a:hover {
 	color:#acb4b8}
 
+.imefilter-content a {
+	color:#4b5257;
+	display:block;
+	width:79px;
+	padding-left:7px;
+	height:21px;
+}
+
+.imefilter-content .checked {
+	background:url(../images/filter_button.gif) 0 0 no-repeat;}
+
+.imefilter-content .checked a {
+	color:#acb4b8}
+
+.imefilter-content a:hover {
+	color:#acb4b8}
+
 .filter-arrow,
 .arrowup {
 	position:absolute;
@@ -1146,6 +1174,14 @@ margin-left: 12px;
 
 .filter-hide .filter-content,
 .filter-content {
+display:none;
+	}
+
+.imefilter-hide {
+	background:none}
+
+.imefilter-hide .imefilter-content,
+.imefilter-content {
 display:none;
 	}
 .keyboard {

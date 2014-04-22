@@ -1,4 +1,5 @@
 var widgetAPI = new Common.API.Widget();
+var pluginAPI = new Common.API.Plugin();
 
 var fired = false;
 var itemCounter = 0;
@@ -13,6 +14,7 @@ var Main =
 Main.onLoad = function()
 {
 	widgetAPI.sendReadyEvent();
+        pluginAPI.registIMEKey();
 	Language.setLang();
 	Resolution.displayRes();
 	this.loadXml();	
@@ -48,6 +50,7 @@ Main.loadXml = function(){
 					alert(Link);
 					var Description = $video.find('Description').text();
 					var ImgLink = $video.find('ImgLink').text();
+                                        ImgLink = ImgLink.replace("/medium/", "/small/");
 					var Live = $video.find('Live').text();
 					var starttime = $video.find('Startime').text();
 					var html;

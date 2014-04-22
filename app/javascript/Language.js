@@ -31,7 +31,7 @@ Language.setLang = function(){
 		$("#searchshow").text('Search shows');
 	
 
-		$("#write").val('Search show title...');
+		$("#write").val('');
 		$("#delete").text('Delete');
 		$("#search").text('Search');
 		
@@ -54,7 +54,7 @@ Language.setLang = function(){
 		$("#channels").text('Kanaler & livesändningar');
 		$("#searchshow").text('Sök programtitlar');
 		
-		$("#write").val('Sök programtitlar...');
+		$("#write").val('');
 		$("#delete").text('Ta Bort');
 		$("#search").text('Sök');
 		

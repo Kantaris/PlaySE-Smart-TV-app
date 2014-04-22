@@ -84,6 +84,7 @@ live.getJson = function(){
 		            var Name = $video.find('Name').text();
 					var Link = $video.find('Link').text();
 					var ImgLink= $video.find('ImgLink').text();
+                                        ImgLink = ImgLink.replace("/medium/", "/small/");
 					var pbar = $video.find('PlayBar').text();
 					var starttime = $video.find('Startime').text();
 					var endtime = $video.find('Endtime').text();

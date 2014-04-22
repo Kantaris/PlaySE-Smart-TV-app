@@ -17,9 +17,9 @@ ConnectionError.init = function()
 ConnectionError.show = function()
 {
 	
-	if(Buttons.getKeyHandleID() != 8){
+	if(Buttons.getKeyHandleID() != 9){
 		oldKeyHandle = Buttons.getKeyHandleID();
-		Buttons.setKeyHandleID(8);
+		Buttons.setKeyHandleID(9);
 	}
 	else{
 		Buttons.setKeyHandleID(oldKeyHandle);

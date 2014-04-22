@@ -228,6 +228,40 @@ Player.skipBackwardVideo = function()
 	timeoutS = window.setTimeout(this.skipInVideo, 2000);
 };
 
+Player.skipLongForwardVideo = function()
+{
+	window.clearTimeout(timeoutS);
+	this.showControls();
+	if(this.skipState == -1){
+		skipTime = ccTime;
+	}
+	skipTime = +skipTime + 5*60*1000;
+	var tsecs = +this.plugin.GetDuration() - 5*60*1000;
+	if(+skipTime > +tsecs){
+		skipTime = tsecs;
+	}
+    this.skipState = this.FORWARD;
+    alert("forward skipTime: " + skipTime);
+    this.updateSeekBar(skipTime);
+	timeoutS = window.setTimeout(this.skipInVideo, 2000);
+};
+
+Player.skipLongBackwardVideo = function()
+{
+	window.clearTimeout(timeoutS);
+	this.showControls();
+	if(this.skipState == -1){
+		skipTime = ccTime;
+	}
+	skipTime = +skipTime - 5*60*1000;
+	if(+skipTime < 0){
+		skipTime = 0;
+	}
+    this.skipState = this.REWIND;
+    this.updateSeekBar(skipTime);
+	timeoutS = window.setTimeout(this.skipInVideo, 2000);
+};
+
 Player.getState = function()
 {
     return this.state;

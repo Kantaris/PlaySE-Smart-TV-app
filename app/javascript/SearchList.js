@@ -88,6 +88,7 @@ SearchList.loadXml = function(){
 			alert(Link);
 			var Description = $video.find('Description').text();
 			var ImgLink  = $video.find('ImgLink').text();
+                        ImgLink = ImgLink.replace("/medium/", "/small/");
 			var html;
 			if(itemCounter % 2 == 0){
 				if(itemCounter > 0){
@@ -100,8 +101,13 @@ SearchList.loadXml = function(){
 			else{
 				html = '<div class="scroll-content-item bottomitem">';
 			}
+
+                    var LinkPrefx = '<a href="showList.html?name=';
+                    if (Link.search("/klipp/") != -1 || Link.search("/video/") != -1) {
+                        LinkPrefx = '<a href="details.html?ilink=';
+                    }
 					html += '<div class="scroll-item-img">';
-						html += '<a href="showList.html?name=' + Link + '&history=' + document.title  + Name + '/" class="ilink"><img src="' + ImgLink + '" width="240" height="135" alt="" /></a>';
+						html += LinkPrefx + Link + '&history=' + document.title  + Name + '/" class="ilink"><img src="' + ImgLink + '" width="240" height="135" alt="" /></a>';
 					html += '</div>';
 					html += '<div class="scroll-item-name">';
 						html +=	'<p><a href="#">' + Name + '</a></p>';

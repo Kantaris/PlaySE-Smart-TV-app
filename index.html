@@ -7,8 +7,10 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
     <!-- TODO : Common API -->
     <script type="text/javascript" src= "$MANAGER_WIDGET/Common/API/Widget.js"></script>
+    <script type="text/javascript" src="$MANAGER_WIDGET/Common/API/Plugin.js"></script>
     <script type="text/javascript"  src="$MANAGER_WIDGET/Common/API/TVKeyValue.js"></script>
     <script type="text/javascript" src="$MANAGER_WIDGET/Common/jquery.js"></script>
+    <!-- <script type="text/javascript" src="$MANAGER_WIDGET/Common/OpenSrc/jquery-1.4.2.min.js"></script> -->
     <!-- js/jquery.min.js -->
     <!-- TODO : Javascript code -->
     <script type="text/javascript" src="app/javascript/Buttons.js"></script>
@@ -20,6 +22,9 @@
    
 </head>
 <body onload="Main.onLoad();" onunload="Main.onUnload();">
+    <script type="text/javascript" src="$MANAGER_WIDGET/Common/IME/ime2.js"></script>
+    <!-- <script type="text/javascript" src="$MANAGER_WIDGET/Common/IME_XT9/ime.js"></script> -->
+    <!-- <script type="text/javascript" src="$MANAGER_WIDGET/Common/IME_XT9/inputCommon/ime_input.js"></script> -->
     <!-- Dummy anchor as focus for key events -->
     <a href="javascript:void(0);" id="anchor" onkeydown="Buttons.keyDown();"></a>
     <!-- TODO: your code here -->
@@ -104,74 +109,10 @@
 				
 				
                 <div class="slider-filter">
-                    <div class="filter-content">
+                    <div class="imefilter-content">
                         <div class="input_bg">
-                            <input id="write" class="footer_input" type="text" value="Sök programtitlar..." />
+                            <input id="write" class="footer_input" type="text" value="" />
                         </div>
-                        <ul class="keyboard">
-                            <li class="symbol row1 selected">!</li>
-                            <li class="symbol row1">1</li>
-                            <li class="symbol row1">2</li>
-                            <li class="symbol row1">3</li>
-                            <li class="symbol row1">4</li>
-                            <li class="symbol row1">5</li>
-                            <li class="symbol row1">6</li>
-                            <li class="symbol row1">7</li>
-                            <li class="symbol row1">8</li>
-                            <li class="symbol row1">9</li>
-                            <li class="symbol row1">0</li>
-                            <li class="symbol row1">-</li>
-                            <li class="symbol row1">+</li>
-                            <li class="delete row1 lastitem" id="delete">Ta Bort</li>
-                        </ul>
-                        <ul class="keyboard">
-                            <li class="tab row2">Tab</li>
-                            <li class="letter row2">q</li>
-                            <li class="letter row2">w</li>
-                            <li class="letter row2">e</li>
-                            <li class="letter row2">r</li>
-                            <li class="letter row2">t</li>
-                            <li class="letter row2">y</li>
-                            <li class="letter row2">u</li>
-                            <li class="letter row2">i</li>
-                            <li class="letter row2">o</li>
-                            <li class="letter row2">p</li>
-                            <li class="letter row2">å</li>
-                            <li class="symbol row2">:</li>
-                            <li class="symbol row2 lastitem">?</li>
-                        </ul>
-                        <ul class="keyboard">
-                            <li class="capslock row3">Caps Lock</li>
-                            <li class="letter row3">a</li>
-                            <li class="letter row3">s</li>
-                            <li class="letter row3">d</li>
-                            <li class="letter row3">f</li>
-                            <li class="letter row3">g</li>
-                            <li class="letter row3">h</li>
-                            <li class="letter row3">j</li>
-                            <li class="letter row3">k</li>
-                            <li class="letter row3">l</li>
-                            <li class="letter row3">ö</li>
-                            <li class="letter row3">ä</li>
-                            <li class="return row3 lastitem" id="search">Sök</li>
-                        </ul>
-                        <ul class="keyboard">
-                            <li class="left-shift row4">Shift</li>
-                            <li class="letter row4">z</li>
-                            <li class="letter row4">x</li>
-                            <li class="letter row4">c</li>
-                            <li class="letter row4">v</li>
-                            <li class="letter row4">b</li>
-                            <li class="letter row4">n</li>
-                            <li class="letter row4">m</li>
-                            <li class="symbol row4">,</li>
-                            <li class="symbol row4">.</li>
-                            <li class="symbol row4">/</li>
-                            <li class="right-shift row4 lastitem">Shift</li>
-                        </ul>
-                        <ul class="keyboard">
-                            <li class="space row5 lastitem">&nbsp;</li>
-                        </ul>
                     </div>
                 </div>
             </div>

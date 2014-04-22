@@ -74,10 +74,10 @@ Details.GetPlayUrl = function(){
 					 Resolution.getCorrectStream(videoUrl);
 				}
 				else{
-					
-					gurl = gurl + '?type=embed';
-					alert(gurl);
-					widgetAPI.runSearchWidget('29_fullbrowser', gurl);
+				        Player.stopCallback();						
+					// gurl = gurl + '?type=embed';
+					// alert(gurl);
+					// widgetAPI.runSearchWidget('29_fullbrowser', gurl);
 				}
 			}
 		});
@@ -213,10 +213,8 @@ Details.startPlayer = function()
 			};
 
 			//Player.setVideoURL("http://svt10hls-lh.akamaihd.net/i/svt10hls_0@78142/master.m3u8?__b__=563&bkup=off"  + "|COMPONENT=HLS");
-			this.GetPlayUrl();
-
 			isPlaying = 1;
-			
+			this.GetPlayUrl();
 		}
 	
 };
