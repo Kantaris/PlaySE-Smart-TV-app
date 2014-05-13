@@ -10,6 +10,12 @@ var categoryDetail =
 
 categoryDetail.onLoad = function()
 {
+	Header.display('Rekommenderat');
+	Audio.init();
+	Audio.showMuteFooter();
+	Search.init();
+	Language.init();
+	ConnectionError.init();
 	Language.setLang();
 	Resolution.displayRes();
 	this.loadXml();

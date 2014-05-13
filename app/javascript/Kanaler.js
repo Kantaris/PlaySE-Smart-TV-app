@@ -8,23 +8,18 @@ var language;
 
 var Kanaler =
 {
-	selectedVideo : 0,
-    mode : 0,
-    mute : 0,
-    
-    UP : 0,
-    DOWN : 1,
 
-    WINDOW : 0,
-    FULLSCREEN : 1,
-    
-    NMUTE : 0,
-    YMUTE : 1
 };
 
 Kanaler.onLoad = function()
 {
 	// Enable key event processing
+	Header.display('');
+	Audio.init();
+	Audio.showMuteFooter();
+	Search.init();
+	Language.init();
+	ConnectionError.init();
 	Language.setLang();
 	Resolution.displayRes();
 	Buttons.setKeyHandleID(3);					
@@ -72,13 +67,10 @@ Kanaler.startPlayer = function()
 		$('.video-footer').css("display", "block");
 		$('.bottomoverlaybig').css("display", "block");
 		$('.bottomoverlaybig').html('Buffrar: 0%');
-		
-		$('#pluginPlayer').css("display", "block");
-		$('#pluginAudio').css("display", "block");
-		$('#pluginTVMW').css("display", "block");
+
 		Buttons.setKeyHandleID(5);
 		
-		if ( Player.init() && Audio.init())// && Display.init() )
+		if ( Player.init() && Audio.init())
 		{
 			//Display.setVolume( Audio.getVolume() );
 			//Display.setTime(0);
@@ -92,9 +84,6 @@ Kanaler.startPlayer = function()
 				$('.video-footer').css("display", "none");
 				
 				
-				$('#pluginPlayer').css("display", "none");
-				$('#pluginAudio').css("display", "none");
-				$('#pluginTVMW').css("display", "none");
 				Buttons.setKeyHandleID(3);
 				/* Return to windowed mode when video is stopped
 					(by choice or when it reaches the end) */
@@ -117,9 +106,9 @@ Kanaler.GetPlayUrl = function(){
 			if(key == 'video'){
 				alert(val.videoReferences[1].url);
 				//videoUrl = 'http://kantaris.hemsida.eu/?mode=native&url=http://svt10hls-lh.akamaihd.net/i/svt10hls_0@78142/index_3_av-p.m3u8?sd=10&rebase=on&e=1';
-				//videoUrl = 'http://kantaris.hemsida.eu/?mode=native&url=' + val.videoReferences[1].url;
+				//videoUrl = 'http://playse.kantaris.net/?mode=native&url=' + val.videoReferences[1].url;
 				videoUrl = val.videoReferences[1].url;
-				videoUrl = Resolution.getCorrectStream(videoUrl);
+				videoUrl = Resolution.getCorrectStream(videoUrl, 1);
 				
 			}
 		});
@@ -162,13 +151,6 @@ Kanaler.loadXml = function(){
 			//var Date  = $video.find('Date').text();
 			var VideoLenth=$video.find('VideoLength').text();
 			var Description=$video.find('Description').text();
-			$.getJSON( "http://smart-ip.net/geoip-json?callback=?",
-					function(data){
-						if(data.countryCode != 'SE'){
-							Geofilter.show();	
-						}
-					}
-				);
 			$('.topoverlaybig').html(nowPlaying+': ' + Name);//////
 			var html = '<div class="project-text">';
 		        html+='<div class="project-name">';
@@ -176,15 +158,16 @@ Kanaler.loadXml = function(){
 		        html+='<div class="project-meta border"><a id="shown_now" >Visas nu: </a><a>'+Name+'</a></div>';
 		        html+='<div class="project-meta border"><a id="begins">Börjar: </a><a>'+DetailsPlayTime+'</a></div>';
 				html+='<div class="project-meta"><a id="duration">Längd: </a><a>'+VideoLenth+'</a></div>';
-		        html+='<div class="project-desc"><p>'+Description+'</p></div>';
-                html+='<p><a href="#" id="playButton" class="link-button selected">Spela upp</a></p> ';
-                html+='<p><a href="#" id="backButton" class="link-button4">Tillbaka</a></p>';
+		        html+='<div class="project-desc">'+Description+'</div>';
+		        html+='<div class="bottom-buttons">';
+                html+='<a href="#" id="playButton" class="link-button selected">Spela upp</a>';
+                html+='<a href="#" id="backButton" class="link-button">Tillbaka</a>';
 		        html+=' </div>';
-		        
+		        html+=' </div>';
                 html+='</div>';
-				html+='<img class="imagestyle" src="'+DetailsImgLink+'" alt="Image" /></div></div>';
+				html+='<img class="imagestyle" src="'+DetailsImgLink+'" alt="Image" />';
             	$('#projdetails').html(html);
-			Language.setKanalerLang(language);
+			Language.setKanalerLang();
         });
    },
         error: function(XMLHttpRequest, textStatus, errorThrown)

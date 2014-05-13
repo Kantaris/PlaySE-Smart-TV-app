@@ -19,6 +19,10 @@
 	<script type="text/javascript" src="app/javascript/Resolution.js"></script>
 	<script type="text/javascript" src="app/javascript/ConnectionError.js"></script>
 	<script type="text/javascript" src="app/javascript/Main.js"></script>
+	<script type="text/javascript" src="app/javascript/Audio.js"></script>
+	<script type="text/javascript" src="app/javascript/Header.js"></script>
+	<script type="text/javascript" src="app/javascript/Footer.js"></script>
+	 <object id="pluginAudio" border="0" classid="clsid:SAMSUNG-INFOLINK-AUDIO"></object>
    
 </head>
 <body onload="Main.onLoad();" onunload="Main.onUnload();">
@@ -31,130 +35,27 @@
     <div id="outer">
         <div class="container">
             <!-- header -->
-            <div class="header">
-                <div class="logo">
-                    <a href="index.html">
-                        <img src="images/weeb2.png" alt="" border="0" /></a> Version: 0.2.3</div>
-                <div class="socials">
-                    <p>
-                        <a href="#" class="social-fb" id="companyName">Utvecklad av Christofer Persson åt Kantaris Co.Ltd</a></p>
-                </div>
-                <div class="topmenu">
-                    <ul class="dropdown">
-                        <li class="root-item"><a href="index.html" class="active" id="location">Rekommenderat</a></li>
-                    </ul>
-                </div>
-                <div class="clear">
-                </div>
-            </div>
-			<div class="slider-language">
-                <div class="language-content">
-
-                        <ul>
-
-                            <li class="title stitle"><a href="#">Language / Språk:</a></li>
-
-                            <li id="english" class="unselected"><a href="#">English</a></li>
-
-                            <li id="swedish" class="checked unselected"><a href="#">Svenska</a></li>
-
-                        </ul>
-
-                </div>
-                <div class="res-content">
-
-                        <ul>
-
-                            <li class="title"><a href="#">Resolution / Upplösning:</a></li>
-
-							<li id="resauto" class="unselected"><a href="#">Auto</a></li>
-							
-                            <li id="res1" class="unselected"><a href="#">256x144</a></li>
-
-                            <li id="res2" class="unselected"><a href="#">512x288</a></li>
-                            
-                            <li id="res3" class="unselected"><a href="#">768x432</a></li>
-                            
-                            <li id="res4" class="unselected"><a href="#">1024x576</a></li>
-                             
-                            <li id="res5" class="unselected"><a href="#">1280x720</a></li>
-
-                        </ul>
-
-                </div>
-            </div>
-			<div class="slider-error">
-                <div class="error-content">
-
-                        <ul>
-
-                            <li class="btext"><a href="#">Connection error, can't connect to svtplay.se.</a></li>
-
-                            <li id="breturn" class="selected"><a href="#">Retry</a></li>
-
-
-                        </ul>
-
-                </div>
-            </div>
+            <div class="header"></div>
             <!--/ header -->
-            <!-- slider -->
+			<div class="slider-language"></div>
+			<div class="slider-error"></div>
+            <div class="slider-search"></div>
+            <div class="slider-imesearch"></div>
+            
+            <!-- body slider -->
             <div class="slider-body">
                 <div id="content-scroll">
                     <div id="topRow" class="content-holder">
                     </div>
                     <div id="bottomRow" class="content-holder">
                     </div>
-                </div>
-				
-				
-                <div class="slider-filter">
-                    <div class="imefilter-content">
-                        <div class="input_bg">
-                            <input id="write" class="footer_input" type="text" value="" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="content-slider">
-            </div>
-        </div>
-        <!--/ slider -->
-        <div class="footer">
-            <div class="footer-content" id="myflooter" align="center">
-				<div class="footer-left-r">
-                </div>
-                <div class="footer-box-r">
-                    <img src="images/menu.png" alt="" border="0" />Inställningar / Settings</div>
-                <div class="footer-right-r">
-                </div>
-                <div class="footer-left-r">
-                </div>
-                <div class="footer-box-r">
-                    <img src="images/red.png" alt="" border="0" /><span id="recommended" >Rekommenderat</span></div>
-                <div class="footer-right-r">
-                </div>
-                <div class="footer-left-r">
-                </div>
-                <div class="footer-box-r">
-                    <img src="images/green.png" alt="" border="0" /><span id="categories" >Kategorier</span></div>
-                <div class="footer-right-r">
-                </div>
-                <div class="footer-left-r">
-                </div>
-                <div class="footer-box-r">
-                    <img src="images/yellow.png" alt="" border="0" /><span id="channels">Kanaler & livesändningar</span></div>
-                <div class="footer-right-r">
-                </div>
-                <div class="footer-left-r">
-                </div>
-                <div class="footer-box-r">
-                    <img src="images/blue.png" alt="" border="0" /><span id="searchshow">Sök programtitlar</span></div>
-                <div class="footer-right-r">
-                </div>
-            </div>
-        </div>
-        <!--/ middle -->
-    </div>
+                </div>     
+            </div>  
+			<!--/ body slider -->
+        
+	        <div class="footer"><div class="footer-content" align="center"></div></div>
+
+    	</div>
+	</div>
 </body>
 </html>

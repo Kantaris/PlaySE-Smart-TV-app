@@ -13,6 +13,12 @@ var Main =
 
 Main.onLoad = function()
 {
+	Header.display('Rekommenderat');
+	Audio.init();
+	Audio.showMuteFooter();
+	Search.init();
+	Language.init();
+	ConnectionError.init();
 	widgetAPI.sendReadyEvent();
         pluginAPI.registIMEKey();
 	Language.setLang();

@@ -9,6 +9,12 @@ var Categories =
 
 Categories.onLoad = function()
 {
+	Header.display('Kategorier');
+	Audio.init();
+	Audio.showMuteFooter();
+	Search.init();
+	Language.init();
+	ConnectionError.init();
 	Language.setLang();
 	Resolution.displayRes();
 	this.loadXml();
@@ -43,7 +49,7 @@ Categories.loadXml = function(){
 			//alert(Link);
 			//var Description = $video.find('Description').text();
 			var ImgLink  = "http://www.svtplay.se"+$video.find('ImgLink').text();
-                        ImgLink = ImgLink.replace("/medium/", "/small/");
+			ImgLink = ImgLink.replace("/medium/", "/small/");
 			alert(ImgLink);
 			var html;
 			if(itemCounter % 2 == 0){

@@ -13,6 +13,12 @@ var live =
 
 live.onLoad = function()
 {
+	Header.display('Kanaler & livesändningar');
+	Audio.init();
+	Audio.showMuteFooter();
+	Search.init();
+	Language.init();
+	ConnectionError.init();
 	Language.setLang();
 	Resolution.displayRes();
 	this.getJson();

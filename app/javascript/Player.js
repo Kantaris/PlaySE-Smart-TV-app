@@ -5,6 +5,8 @@ var pluginAPI;
 var ccTime = 0;
 var lastPos = 0;
 var videoUrl;
+var startup = true;
+var smute = 0;
 
 var Player =
 {
@@ -108,9 +110,23 @@ Player.playVideo = function()
         
         this.plugin.SetInitialBuffer(640*1024);
         this.plugin.SetPendingBuffer(640*1024); 
-       
+        startup = true;
+        if(Audio.plugin.GetUserMute() == 1){
+        	$('.muteoverlay').css("display", "block");
+        	smute = 1;
+        }
+        else{
+            $('.muteoverlay').css("display", "none");
+            smute = 0;
+        }
         this.plugin.Play( videoUrl );
-        Audio.plugin.SetUserMute(false);
+        // work-around for samsung bug. Video player start playing with sound independent of the value of GetUserMute() 
+        // GetUserMute() will continue to have the value of 1 even though sound is playing
+        // so I set SetUserMute(0) to get everything synced up again with what is really happening
+        // once video has started to play I set it to the value that it should be.
+        Audio.plugin.SetUserMute(0);
+        
+       // Audio.showMute();
     }
 };
 
@@ -202,9 +218,9 @@ Player.skipForwardVideo = function()
 		skipTime = ccTime;
 	}
 	skipTime = +skipTime + 30000;
-	var tsecs = +this.plugin.GetDuration() - 30000;
+	var tsecs = +this.plugin.GetDuration();
 	if(+skipTime > +tsecs){
-		skipTime = tsecs;
+		skipTime = +this.plugin.GetDuration();
 	}
     this.skipState = this.FORWARD;
     alert("forward skipTime: " + skipTime);
@@ -227,6 +243,7 @@ Player.skipBackwardVideo = function()
     this.updateSeekBar(skipTime);
 	timeoutS = window.setTimeout(this.skipInVideo, 2000);
 };
+
 
 Player.skipLongForwardVideo = function()
 {
@@ -329,6 +346,11 @@ Player.hideControls = function(){
 
 Player.setCurTime = function(time)
 {
+	// work-around for samsung bug. Mute sound first after the player started.
+	if(startup){
+		startup = false;
+		Audio.setCurrentMode(smute);
+	}
 	ccTime = time;
 	if(this.skipState == -1){
 		this.updateSeekBar(time);
@@ -367,6 +389,7 @@ Player.updateSeekBar = function(time){
 
 Player.setTotalTime = function()
 {
+	
 	var tsecs = this.plugin.GetDuration() / 1000;
 	var secs = Math.floor(tsecs % 60);
 	var mins = Math.floor(tsecs / 60);

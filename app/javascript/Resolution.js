@@ -1,6 +1,8 @@
 var resButton = ["#resauto", "#res1", "#res2", "#res3", "#res4", "#res5"];
 var bwidths = [0, 400000, 700000, 1200000, 2000000, 3000000];
+var lbwidths = [400000, 700000, 1200000, 2000000, 3000000];
 var target = 1200000;
+var livetarget = 1200000;
 var bandwidths = [];
 var urls = [];
 
@@ -22,6 +24,10 @@ Resolution.displayRes = function(){
 	alert(resButton[value]);
 	$(resButton[value]).addClass('checked');
 	target = bwidths[value];
+	value = this.checkLiveRes();
+	alert(reslButton[value]);
+	$(reslButton[value]).addClass('checked');
+	livetarget = lbwidths[value];
 };
 
 Resolution.getTarget = function(){
@@ -29,7 +35,7 @@ Resolution.getTarget = function(){
 	
 };
 
-Resolution.getCorrectStream = function(videoUrl){
+Resolution.getCorrectStream = function(videoUrl, isLive){
 	alert('target: ' + target);
 	if(target > 0){
 		$.support.cors = true;
@@ -58,12 +64,24 @@ Resolution.getCorrectStream = function(videoUrl){
 				var currentId = 0;
 				for (ij = 0; ij < bandwidths.length; ij++) {
 					alert(bandwidths[ij]);
-					if(+bandwidths[ij] <= +target){
-						alert(bandwidths[ij]);
-						if(+bandwidths[ij] > +current){
+					if(isLive == 0){
+						if(+bandwidths[ij] <= +target){
 							alert(bandwidths[ij]);
-							current = bandwidths[ij];
-							currentId = ij;
+							if(+bandwidths[ij] > +current){
+								alert(bandwidths[ij]);
+								current = bandwidths[ij];
+								currentId = ij;
+							}
+						}
+					}
+					else{
+						if(+bandwidths[ij] <= +livetarget){
+							alert(bandwidths[ij]);
+							if(+bandwidths[ij] > +current){
+								alert(bandwidths[ij]);
+								current = bandwidths[ij];
+								currentId = ij;
+							}
 						}
 					}
 				}
@@ -122,6 +140,26 @@ else
 Resolution.setRes = function(value)
 {
 	this.setCookie('res', value, 1000);
+	target = bwidths[value];
+};
+
+Resolution.checkLiveRes = function()
+{
+var res=this.getCookie("liveres");
+var defa = 2;
+if (res!=null && res!="")
+  {
+  return res;
+  }
+else 
+  {
+	return defa;
+  }
+};
+
+Resolution.setLiveRes = function(value)
+{
+	this.setCookie('liveres', value, 1000);
 	target = bwidths[value];
 };
 

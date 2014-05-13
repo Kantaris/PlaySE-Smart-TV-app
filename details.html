@@ -6,22 +6,24 @@
     <!-- TODO : Style sheets code -->
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
     <!-- TODO : Common API -->
-    <script type="text/javascript" src="$MANAGER_WIDGET/Common/API/Widget.js"></script>
+  	<script type="text/javascript" src="$MANAGER_WIDGET/Common/API/Widget.js"></script>
     <script type="text/javascript" src="$MANAGER_WIDGET/Common/API/TVKeyValue.js"></script>
-    <script type="text/javascript" src="$MANAGER_WIDGET/Common/jquery.js"></script>
+   	<script type="text/javascript" src="$MANAGER_WIDGET/Common/jquery.js"></script>
 	<script type='text/javascript' src='$MANAGER_WIDGET/Common/API/Plugin.js'></script>
-    <!-- js/jquery.min.js -->
+    <!-- <script type='text/javascript' src='jquery.js'></script>-->
     <!-- TODO : Javascript code -->
 	<script type="text/javascript" src="app/javascript/Geofilter.js"></script>
     <script type="text/javascript" src="app/javascript/Details.js"></script>
-    <script type="text/javascript" src="app/javascript/Buttons.js"></script>
+     <script type="text/javascript" src="app/javascript/Buttons.js"></script>
 	<script type="text/javascript" src="app/javascript/Audio.js"></script>
 	<script type="text/javascript" src="app/javascript/Player.js"></script>
     <script type="text/javascript" src="app/javascript/PathHistory.js"></script>
     <script type="text/javascript" src="app/javascript/Search.js"></script>
 	<script type="text/javascript" src="app/javascript/Language.js"></script>	
 	<script type="text/javascript" src="app/javascript/ConnectionError.js"></script>
-		<script type="text/javascript" src="app/javascript/Resolution.js"></script>
+	<script type="text/javascript" src="app/javascript/Resolution.js"></script>
+    <script type="text/javascript" src="app/javascript/Header.js"></script>
+	<script type="text/javascript" src="app/javascript/Footer.js"></script>
     <!-- Plugins -->
 
 	<object id='pluginObjectNNavi' border=0 classid='clsid:SAMSUNG-INFOLINK-NNAVI' style='opacity:0.0; width:0px; height:0px;'></object>
@@ -44,6 +46,10 @@
         <div class="video-push">
         </div>
     </div>
+    <span class="muteoverlay"><img src="images/mute.png" alt="" border="0" /></span>
+    <div id="flash-content">
+	            <iframe id="iframe" width="100%" height="100%" frameborder="0">Your browser does not support iFrames</iframe>
+     </div>
     <div class="video-footer">
 	<div class="currentTime">
             00:00</div>
@@ -59,202 +65,30 @@
 	<div id="outer">
         <div class="container">
             <!-- header -->
-            <div class="header">
-                <div class="logo">
-                    <a href="index.html">
-                        <img src="images/weeb2.png" alt="" border="0" /></a></div>
-                <div class="socials">
-                    <p>
-                        <a href="#" class="social-fb" id="companyName">Utvecklad av Christofer Persson åt Kantaris Co.Ltd</a>
-                    </p>
-                </div>
-                <div class="topmenu">
-                    <ul class="dropdown">
-                        
-                    </ul>
-                </div>
-                <div class="clear">
-                </div>
-            </div>
-			<div class="slider-language">
-                <div class="language-content">
-
-                        <ul>
-
-                            <li class="title"><a href="#">Language / Språk:</a></li>
-
-                            <li id="english" class="selected"><a href="#">English</a></li>
-
-                            <li id="swedish" class="checked unselected"><a href="#">Svenska</a></li>
-
-                        </ul>
-
-                </div>
-                 <div class="res-content">
-
-                        <ul>
-
-                            <li class="title"><a href="#">Resolution / Upplösning:</a></li>
-
-							<li id="resauto" class="unselected"><a href="#">Auto</a></li>
-							
-                            <li id="res1" class="unselected"><a href="#">256x144</a></li>
-
-                            <li id="res2" class="unselected"><a href="#">512x288</a></li>
-                            
-                            <li id="res3" class="unselected"><a href="#">768x432</a></li>
-                            
-                            <li id="res4" class="unselected"><a href="#">1024x576</a></li>
-                             
-                            <li id="res5" class="unselected"><a href="#">1280x720</a></li>
-
-                        </ul>
-
-                </div>
-            </div>
-			<div class="slider-blocked">
-                <div class="blocked-content">
-
-                        <ul>
-
-                            <li class="btext"><a href="#">Sorry, this video has been blocked from users outside Sweden.</a></li>
-
-                            <li id="breturn" class="selected"><a href="#">Return</a></li>
-
-
-                        </ul>
-
-                </div>
-            </div>
-			<div class="slider-error">
-                <div class="error-content">
-
-                        <ul>
-
-                            <li class="btext"><a href="#">Connection error, can't connect to svtplay.se.</a></li>
-
-                            <li id="breturn" class="selected"><a href="#">Retry</a></li>
-
-
-                        </ul>
-
-                </div>
-            </div>
+            <div class="header"></div>
             <!--/ header -->
+			<div class="slider-language"></div>
+			<div class="slider-blocked">
+	            <div class="blocked-content">
+	                <ul>
+	                    <li class="btext"><a href="#">Sorry, this video has been blocked from users outside Sweden.</a></li>
+	                    <li id="breturn" class="selected"><a href="#">Return</a></li>
+	                </ul>
+	            </div>
+	        </div>
+			<div class="slider-error"></div>
+             <div class="slider-search"></div>
             <!-- content -->
             <div class="content">
-                <div class="project-detail" id="projdetails">
-                </div>
-                <div class="slider-filter">
-                    <div class="filter-content">
-                        <div class="input_bg">
-                            <input id="write" class="footer_input" type="text" value="Sök programtitlar..." />
-                        </div>
-                        <ul class="keyboard">
-                            <li class="symbol row1 selected">!</li>
-                            <li class="symbol row1">1</li>
-                            <li class="symbol row1">2</li>
-                            <li class="symbol row1">3</li>
-                            <li class="symbol row1">4</li>
-                            <li class="symbol row1">5</li>
-                            <li class="symbol row1">6</li>
-                            <li class="symbol row1">7</li>
-                            <li class="symbol row1">8</li>
-                            <li class="symbol row1">9</li>
-                            <li class="symbol row1">0</li>
-                            <li class="symbol row1">-</li>
-                            <li class="symbol row1">+</li>
-                            <li class="delete row1 lastitem" id="delete">Ta Bort</li>
-                        </ul>
-                        <ul class="keyboard">
-                            <li class="tab row2">Tab</li>
-                            <li class="letter row2">q</li>
-                            <li class="letter row2">w</li>
-                            <li class="letter row2">e</li>
-                            <li class="letter row2">r</li>
-                            <li class="letter row2">t</li>
-                            <li class="letter row2">y</li>
-                            <li class="letter row2">u</li>
-                            <li class="letter row2">i</li>
-                            <li class="letter row2">o</li>
-                            <li class="letter row2">p</li>
-                            <li class="letter row2">å</li>
-                            <li class="symbol row2">:</li>
-                            <li class="symbol row2 lastitem">?</li>
-                        </ul>
-                        <ul class="keyboard">
-                            <li class="capslock row3">Caps Lock</li>
-                            <li class="letter row3">a</li>
-                            <li class="letter row3">s</li>
-                            <li class="letter row3">d</li>
-                            <li class="letter row3">f</li>
-                            <li class="letter row3">g</li>
-                            <li class="letter row3">h</li>
-                            <li class="letter row3">j</li>
-                            <li class="letter row3">k</li>
-                            <li class="letter row3">l</li>
-                            <li class="letter row3">ö</li>
-                            <li class="letter row3">ä</li>
-                            <li class="return row3 lastitem" id="search">Sök</li>
-                        </ul>
-                        <ul class="keyboard">
-                            <li class="left-shift row4">Shift</li>
-                            <li class="letter row4">z</li>
-                            <li class="letter row4">x</li>
-                            <li class="letter row4">c</li>
-                            <li class="letter row4">v</li>
-                            <li class="letter row4">b</li>
-                            <li class="letter row4">n</li>
-                            <li class="letter row4">m</li>
-                            <li class="symbol row4">,</li>
-                            <li class="symbol row4">.</li>
-                            <li class="symbol row4">/</li>
-                            <li class="right-shift row4 lastitem">Shift</li>
-                        </ul>
-                        <ul class="keyboard">
-                            <li class="space row5 lastitem">&nbsp;</li>
-                        </ul>
-                    </div>
+                <div class="project-details" id="projdetails">
                 </div>
             </div>
+	        <!--/ content -->
+	        <!-- footer -->
+	        <div class="footer"><div class="footer-content"></div></div>
+	        <!--/ footer -->
         </div>
-        <!--/ content -->
-        <!-- footer -->
-        <div class="footer">
-            <div class="footer-content">
-				<div class="footer-left-r">
-                </div>
-                <div class="footer-box-r">
-                    <img src="images/menu.png" alt="" border="0" />Inställningar / Settings</div>
-                <div class="footer-right-r">
-                </div>
-                <div class="footer-left-r">
-                </div>
-                <div class="footer-box-r">
-                    <img src="images/red.png" alt="" border="0" /><span id="recommended">Rekommenderat</span></div>
-                <div class="footer-right-r">
-                </div>
-                <div class="footer-left-r">
-                </div>
-                <div class="footer-box-r">
-                    <img src="images/green.png" alt="" border="0" /><span id="categories">Kategorier</span></div>
-                <div class="footer-right-r">
-                </div>
-                <div class="footer-left-r">
-                </div>
-                <div class="footer-box-r">
-                    <img src="images/yellow.png" alt="" border="0" /><span id="channels">Kanaler & livesändningar</span></div>
-                <div class="footer-right-r">
-                </div>
-                <div class="footer-left-r">
-                </div>
-                <div class="footer-box-r">
-                    <img src="images/blue.png" alt="" border="0" /><span id="searchshow" >Sök programtitlar</span></div>
-                <div class="footer-right-r">
-                </div>
-            </div>
-        </div>
-        <!--/ footer -->
+        
     </div>
 </body>
 </html>

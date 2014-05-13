@@ -6,6 +6,13 @@ var buff;
 var nowPlaying;
 var language;
 var gurl = "";
+var isLive = 0;
+var airTime = 0;
+var currentTime = 0;
+var countd=0;
+var downCounter;
+var proxy = "";
+
 var Details =
 {
 
@@ -13,7 +20,12 @@ var Details =
 
 Details.onLoad = function()
 {
-
+	Header.display('');
+	Audio.init();
+	Audio.showMuteFooter();
+	Search.init();
+	Language.init();
+	ConnectionError.init();
 	PathHistory.GetPath();
 	// Enable key event processing
 	Language.setLang();
@@ -50,14 +62,108 @@ Details.Geturl=function(){
     return name;
 };
 
+Details.Prepare = function(){
 
+	if(isLive > 0){
+			var url= "http://188.40.102.5/CurrentTime.ashx";
+			alert(url);
+			$.support.cors = true;
+			 $.ajax(
+		    {
+		        type: 'GET',
+		        url: url,
+				timeout: 15000,
+				tryCount : 0,
+			    retryLimit : 3,
+		        success: function(data)
+		        {
+		            alert('Success prepare');
+		            currentTime = +($(data).find('CurrentTime').text());
+		            alert("currentTime=" + currentTime);
+		            if(airTime > currentTime){
+						 countd = airTime - currentTime + 60;
+						 alert("countd = " + countd);
+						 downCounter = setInterval(Details.CountDown, 1000); 
+					 }
+					 else{
+						 Details.GetPlayUrl();
+					 }
+		        }
+		    , 
+	        error: function(XMLHttpRequest, textStatus, errorThrown)
+	        {
+	          	if (textStatus == 'timeout') {
+	                this.tryCount++;
+	                if (this.tryCount <= this.retryLimit) {
+	                    //try again
+	                    $.ajax(this);
+	                    return;
+	                }            
+	                return;
+	            }
+	        	else{
+	        		alert('Failure');
+	        		ConnectionError.show();
+	        	}
+	         
+	        }
+		    });	
+			 
+	}
+	else{
+		 this.GetPlayUrl();
+	 }
+
+};
+
+Details.CountDown = function()
+{
+	  countd = countd - 1;
+	  if (countd <= 0)
+	  {
+	     clearInterval(downCounter);
+	     Details.GetPlayUrl();
+	     return;
+	  }
+	  var secs = Math.floor(countd % 60);
+	  var mins = Math.floor(countd / 60);
+	  var hrs = Math.floor(mins / 60);
+	  mins = Math.floor(mins % 60);
+	  var smins;
+	  var ssecs;
+	  var shrs;
+	  if(hrs < 10){
+			shrs = '0' + hrs;
+		}
+		else{
+			shrs = hrs;
+		}
+		if(mins < 10){
+			smins = '0' + mins;
+		}
+		else{
+			smins = mins;
+		}
+		if(secs < 10){
+			ssecs = '0' + secs;
+		}
+		else{
+			ssecs = secs;
+		}
+		if(Language.getisSwedish()){
+			 $('.bottomoverlaybig').html("Live - börjar om: " + shrs + ":" + smins + ":" + ssecs);
+		}
+		else{
+			$('.bottomoverlaybig').html("Live - starts in: " + shrs + ":" + smins + ":" + ssecs);
+		}
+};
 
 Details.GetPlayUrl = function(){
 	gurl = this.Geturl();
 	if(gurl.indexOf("http://") < 0){
 		gurl = 'http://www.svtplay.se' + gurl;
 	}
-	$.getJSON(gurl + '?output=json', function(data) {
+	$.getJSON(proxy + gurl + '?output=json', function(data) {
 		
 		$.each(data, function(key, val) {
 			if(key == 'video'){
@@ -71,13 +177,21 @@ Details.GetPlayUrl = function(){
 				}
 
 				if(videoUrl.indexOf('.m3u8') >= 0){
-					 Resolution.getCorrectStream(videoUrl);
+					 Resolution.getCorrectStream(videoUrl, isLive);
 				}
 				else{
-				        Player.stopCallback();						
-					// gurl = gurl + '?type=embed';
-					// alert(gurl);
-					// widgetAPI.runSearchWidget('29_fullbrowser', gurl);
+				    Player.stopCallback();	
+					
+				// 	gurl = gurl + '?type=embed';
+				// 	alert(gurl);
+				// 	widgetAPI.runSearchWidget('29_fullbrowser', gurl);
+				// //	$('#outer').css("display", "none");
+				// //	$('.video-wrapper').css("display", "none");
+					
+				// //	$('.video-footer').css("display", "none");
+
+				// //	$('#flash-content').css("display", "block");
+				// //	$('#iframe').attr('src', gurl);
 				}
 			}
 		});
@@ -114,15 +228,21 @@ Details.loadXml = function(){
 				DetailsPlayTime=DetailsPlayTime.replace("idag","today");
 			}
 			var Date  = $video.find('Date').text();
-			var VideoLenth=$video.find('VideoLength').text();
+			var VideoLength=$video.find('VideoLength').text();
 			var Description=$video.find('Description').text();
 			var onlySweden = $video.find('OnlySweden').text();
+			isLive = +($video.find('Live').text());
+			airTime = +($video.find('AirTime').text());
+			alert("isLive=" + isLive);
+			alert("airTime=" + airTime);
 			alert(onlySweden);
 			if(onlySweden == "True"){
+				//proxy = 'http://playse.kantaris.net/?mode=native&url=';
 				$.getJSON( "http://smart-ip.net/geoip-json?callback=?",
 					function(data){
 						if(data.countryCode != 'SE'){
-							Geofilter.show();	
+							
+							//Geofilter.show();	
 						}
 					}
 				);
@@ -136,17 +256,19 @@ Details.loadXml = function(){
 		        html+='<h1>'+Name+'</h1>';
 		        html+='<div class="project-meta border"><a id="aired" type="text">Sändes: </a><a>'+DetailsPlayTime+'</a></div>';
 		        html+='<div class="project-meta border"><a id="available" type="text">Tillgänglig till: </a><a>'+Date+'</a></div>';
-				html+='<div class="project-meta"><a id="duration" type="text">Längd: </a><a>'+VideoLenth+'</a></div>';
-		        html+='<div class="project-desc"><p>'+Description+'</p></div>';
-                html+='<p><a href="#" id="playButton" class="link-button selected">Spela upp</a></p> ';
-                html+='<p><a href="#" id="backButton" class="link-button4">Tillbaka</a></p>';
+				html+='<div class="project-meta"><a id="duration" type="text">Längd: </a><a>'+VideoLength+'</a></div>';
+		        html+='<div class="project-desc">'+Description+'</div>';
+		        html+='<div class="bottom-buttons">';
+                html+='<a href="#" id="playButton" class="link-button selected">Spela upp</a> ';
+                html+='<a href="#" id="backButton" class="link-button">Tillbaka</a>';
+                html+=' </div>';
 		        html+=' </div>';
 		        
                 html+='</div>';
-				html+='<img class="imagestyle" src="'+DetailsImgLink+'" alt="Image" /></div></div>';
+				html+='<img class="imagestyle" src="'+DetailsImgLink+'" alt="Image" />';
             	$('#projdetails').html(html);
 			
-			Language.setDetailLang(language);
+			Language.setDetailLang();
         });
    },
         error: function(XMLHttpRequest, textStatus, errorThrown)
@@ -184,15 +306,11 @@ Details.startPlayer = function()
 		$('.bottomoverlaybig').css("display", "block");
 		$('.bottomoverlaybig').html(buff+': 0%');
 		
-		$('#pluginPlayer').css("display", "block");
-		$('#pluginAudio').css("display", "block");
-		$('#pluginTVMW').css("display", "block");
+
 		Buttons.setKeyHandleID(2);
 		
-		if ( Player.init() && Audio.init())// && Display.init() )
+		if ( Player.init() && Audio.init())
 		{
-			//Display.setVolume( Audio.getVolume() );
-			//Display.setTime(0);
 			
 			Player.stopCallback = function()
 			{
@@ -202,10 +320,6 @@ Details.startPlayer = function()
 		
 				$('.video-footer').css("display", "none");
 				
-				
-				$('#pluginPlayer').css("display", "none");
-				$('#pluginAudio').css("display", "none");
-				$('#pluginTVMW').css("display", "none");
 				Buttons.setKeyHandleID(1);
 				/* Return to windowed mode when video is stopped
 					(by choice or when it reaches the end) */
@@ -214,7 +328,7 @@ Details.startPlayer = function()
 
 			//Player.setVideoURL("http://svt10hls-lh.akamaihd.net/i/svt10hls_0@78142/master.m3u8?__b__=563&bkup=off"  + "|COMPONENT=HLS");
 			isPlaying = 1;
-			this.GetPlayUrl();
+			this.Prepare();
 		}
 	
 };
