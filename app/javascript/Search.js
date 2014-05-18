@@ -40,6 +40,8 @@ function Input(/**Object*/id)
     
     var onEnter = function(string)
     {
+        // Cleanup IME before triggering the search
+        Search.imeShow(0);
 	window.location = 'SearchList.html?sok=' + $('#ime_write').val();
 	return true;
     };
@@ -146,13 +148,18 @@ Search.show = function()
 
 };
 
-Search.imeShow = function()
+Search.imeShow = function(slideDuration)
 {
     alert("Search.imeShow called");
+
+    if (slideDuration == undefined)
+        // Set default value
+        slideDuration = 500
+
     if(Buttons.getKeyHandleID()!=7){
         oldKeyHandle = Buttons.getKeyHandleID();
         Buttons.setKeyHandleID(7);
-        $(".slider-imesearch").slideToggle(500, function() {
+        $(".slider-imesearch").slideToggle(slideDuration, function() {
             // Position of input box gets messed up in case focus is called too soon (at least in 2012 simulator).
             if (Buttons.getKeyHandleID() == 7)
                 document.getElementById("ime_write").focus();
@@ -173,7 +180,7 @@ Search.imeShow = function()
         }
     }
     else{
-        $(".slider-imesearch").slideToggle(500, function() {});
+        $(".slider-imesearch").slideToggle(slideDuration, function() {});
         document.getElementById("ime_write").blur()
 	document.body.focus();
         Buttons.setKeyHandleID(oldKeyHandle); 
