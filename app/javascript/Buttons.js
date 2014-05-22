@@ -174,10 +174,15 @@ Buttons.keyHandleForList = function()
 				break;
 			case tvKey.KEY_ENTER:
 			case tvKey.KEY_PANEL_ENTER:
+			case tvKey.KEY_PLAY:
 				var ilink = itemSelected.find('.ilink').attr("href");
 				alert(ilink);
                                 if (ilink != undefined)
+                                {
+                                    if (keyCode == tvKey.KEY_PLAY && ilink.search("details.html\\?" != -1))
+                                        ilink = ilink + "?play";
 	                            window.location = ilink;
+                                }
                                 else {
 	                            itemSelected.removeClass('selected');
                                     itemSelected = false;

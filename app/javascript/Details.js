@@ -201,6 +201,7 @@ Details.GetPlayUrl = function(){
 
 Details.loadXml = function(){
 	var url= "http://188.40.102.5/details.ashx?link="+this.Geturl();
+	var playDirectly = document.location.href.search("\\?play") != -1;
 	alert(url);
 	$.support.cors = true;
 	 $.ajax(
@@ -270,6 +271,8 @@ Details.loadXml = function(){
 			
 			Language.setDetailLang();
         });
+	if (playDirectly)
+        	Details.startPlayer();
    },
         error: function(XMLHttpRequest, textStatus, errorThrown)
         {
@@ -295,6 +298,8 @@ Details.loadXml = function(){
 
 Details.startPlayer = function()
 {				
+		var playDirectly = document.location.href.search("\\?play") != -1;
+
 		if(Language.getisSwedish()){
 			buff='Buffrar';
 		}else{
@@ -324,6 +329,8 @@ Details.startPlayer = function()
 				/* Return to windowed mode when video is stopped
 					(by choice or when it reaches the end) */
 			 //   Main.setWindowMode();
+				if (playDirectly)
+					history.go(-1);
 			};
 
 			//Player.setVideoURL("http://svt10hls-lh.akamaihd.net/i/svt10hls_0@78142/master.m3u8?__b__=563&bkup=off"  + "|COMPONENT=HLS");
