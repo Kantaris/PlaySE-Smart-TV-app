@@ -36,7 +36,8 @@ categoryDetail.Geturl=function(){
     var name="";
     if (url.indexOf("category=")>0)
     {
-		parse = url.substring(url.indexOf("=")+13,url.length);
+		// parse = url.substring(url.indexOf("=")+13,url.length);
+		parse = url.substring(url.indexOf("=")+1,url.length);
 		if (url.indexOf("&")>0)
 		{
 			name = parse.substring(0,parse.indexOf("&"));
@@ -46,7 +47,7 @@ categoryDetail.Geturl=function(){
 			name = parse;
 		}
 	}
-    return name;
+    return name.replace("tvcategories\/", "");
 };
 
 
@@ -69,7 +70,7 @@ categoryDetail.loadXml = function(){
             var $video = $(this); 
             var Name = $video.find('Name').text();
 			var Link = $video.find('Link').text();
-			alert(Link);
+			// alert(Link);
 			
 			var ImgLink  = $video.find('ImgLink').text();
                         ImgLink = ImgLink.replace("/medium/", "/small/");

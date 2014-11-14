@@ -98,7 +98,7 @@ Buttons.sscroll = function(param)
 		xaxis = columnCounter - 1;
 	}
 	xaxis = -xaxis * 260;
-	$('.content-holder').animate({ marginLeft: xaxis}, 100 );
+	$('.content-holder').animate({ marginLeft: xaxis});
 	 
 };
 
@@ -172,15 +172,22 @@ Buttons.keyHandleForList = function()
 				itemSelected.removeClass('selected');
 				itemSelected = topItems.eq(columnCounter).addClass('selected');				
 				break;
+			case tvKey.KEY_INFO:
 			case tvKey.KEY_ENTER:
 			case tvKey.KEY_PANEL_ENTER:
-			case tvKey.KEY_PLAY:
+                        case tvKey.KEY_PLAY:
 				var ilink = itemSelected.find('.ilink').attr("href");
 				alert(ilink);
                                 if (ilink != undefined)
                                 {
-                                    if (keyCode == tvKey.KEY_PLAY && ilink.search("details.html\\?" != -1))
+                                    if (keyCode != tvKey.KEY_INFO && ilink.search("details.html\\?") != -1) {
+                                        alert("JTDEBUG Adding ?play to ilink:" + ilink)
                                         ilink = ilink + "?play";
+                                    }
+                                    else if (keyCode == tvKey.KEY_INFO && ilink.search("details.html\\?") == -1) {
+                                        // Info only relevant if episode, not if show.
+                                        break;
+                                    }
 	                            window.location = ilink;
                                 }
                                 else {
@@ -654,10 +661,10 @@ Buttons.keyHandleForPlayer = function(){
 	switch(keyCode)
 		{
 			case tvKey.KEY_RIGHT:
-                                Player.skipLongForwardVideo()();
+                                Player.skipLongForwardVideo();
 				break;
 			case tvKey.KEY_LEFT:
-                                Player.skipLongBackwardVideo()();
+                                Player.skipLongBackwardVideo();
 				break;
 			case tvKey.KEY_RW:
 				Player.skipBackwardVideo();
@@ -705,6 +712,12 @@ Buttons.keyHandleForPlayer = function(){
 				Audio.toggleMute();
 				break;
 			 break;
+			case tvKey.KEY_BLUE:
+			case tvKey.KEY_ASPECT:
+				Player.toggleAspectRatio();
+				break;
+			 break;
+                    
 		}
 };
 

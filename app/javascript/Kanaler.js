@@ -8,7 +8,7 @@ var language;
 
 var Kanaler =
 {
-
+    duration:null
 };
 
 Kanaler.onLoad = function()
@@ -107,6 +107,7 @@ Kanaler.GetPlayUrl = function(){
 				alert(val.videoReferences[1].url);
 				//videoUrl = 'http://kantaris.hemsida.eu/?mode=native&url=http://svt10hls-lh.akamaihd.net/i/svt10hls_0@78142/index_3_av-p.m3u8?sd=10&rebase=on&e=1';
 				//videoUrl = 'http://playse.kantaris.net/?mode=native&url=' + val.videoReferences[1].url;
+                                Player.setDuration(Kanaler.duration);
 				videoUrl = val.videoReferences[1].url;
 				videoUrl = Resolution.getCorrectStream(videoUrl, 1);
 				
@@ -149,15 +150,16 @@ Kanaler.loadXml = function(){
 			var DetailsImgLink = $video.find('DetailsImgLink').text();
 			var DetailsPlayTime = $video.find('DetailsPlayTime').text();
 			//var Date  = $video.find('Date').text();
-			var VideoLenth=$video.find('VideoLength').text();
+			var VideoLength=$video.find('VideoLength').text();
 			var Description=$video.find('Description').text();
+                        Kanaler.duration = VideoLength;
 			$('.topoverlaybig').html(nowPlaying+': ' + Name);//////
 			var html = '<div class="project-text">';
 		        html+='<div class="project-name">';
 		        html+='<h1>'+channel+'</h1>';
 		        html+='<div class="project-meta border"><a id="shown_now" >Visas nu: </a><a>'+Name+'</a></div>';
 		        html+='<div class="project-meta border"><a id="begins">Börjar: </a><a>'+DetailsPlayTime+'</a></div>';
-				html+='<div class="project-meta"><a id="duration">Längd: </a><a>'+VideoLenth+'</a></div>';
+				html+='<div class="project-meta"><a id="duration">Längd: </a><a>'+VideoLength+'</a></div>';
 		        html+='<div class="project-desc">'+Description+'</div>';
 		        html+='<div class="bottom-buttons">';
                 html+='<a href="#" id="playButton" class="link-button selected">Spela upp</a>';

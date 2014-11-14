@@ -67,7 +67,7 @@ SearchList.sscroll = function(param)
 		xaxis = columnCounter - 1;
 	}
 	xaxis = -xaxis * 240;
-	$('.content-holder').animate({ marginLeft: xaxis}, 500 );
+	$('.content-holder').animate({ marginLeft: xaxis});
 	 
 };
 

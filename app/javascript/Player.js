@@ -15,6 +15,8 @@ var Player =
     skipState : -1,
     stopCallback : null,    /* Callback function to be set by client */
     originalSource : null,
+    sourceDuration: 0,
+    infoActive:false,
     
     STOPPED : 0,
     PLAYING : 1,
@@ -89,10 +91,41 @@ Player.setFullscreen = function()
     this.plugin.SetDisplayArea(0, 0, 960, 540);
 };
 
-Player.setVideoURL = function(url)
+Player.setVideoURL = function(url, srtUrl)
 {
     videoUrl = url;
-    alert("URL = " + url);
+    alert("URL = " + videoUrl);
+};
+
+Player.setDuration = function(duration)
+{
+    if (duration.length > 0) 
+    {
+        var h = GetDigits("h", duration);
+        var m = GetDigits("min", duration);
+        var s = GetDigits("sek", duration);
+        // alert("JTDEBUG decoded duration " + h + ":" + m + ":" + s);
+        this.sourceDuration = (h*3600 + m*60 + s*1) * 1000;
+    }
+    else
+    {
+        this.sourceDuration = 0;
+    }
+    // alert("JTDEBUG Player.sourceDuration: " + this.sourceDuration);
+
+};
+
+GetDigits = function(type, data)
+{
+
+    var regexp1 = new RegExp("^(\\d+) " + type + ".*");
+    var regexp2 = new RegExp("^.*\\D+(\\d+) " + type + ".*");
+    if (data.search(regexp1) != -1)
+        return data.replace(regexp1, "$1");
+    else if (data.search(regexp2) != -1)
+        return data.replace(regexp2, "$1");
+    else
+        return "0"
 };
 
 Player.playVideo = function()
@@ -103,13 +136,13 @@ Player.playVideo = function()
     }
     else
     {
-		pluginAPI.setOffScreenSaver();
+	pluginAPI.setOffScreenSaver();
         this.state = this.PLAYING;
  
         this.setWindow();
         
         this.plugin.SetInitialBuffer(640*1024);
-        this.plugin.SetPendingBuffer(640*1024); 
+        this.plugin.SetPendingBuffer(640*1024);
         startup = true;
         if(Audio.plugin.GetUserMute() == 1){
         	$('.muteoverlay').css("display", "block");
@@ -152,7 +185,7 @@ Player.stopVideo = function()
   
         this.plugin.Stop();
 		//pluginAPI.set0nScreenSaver(6000);
-        
+        $('.topoverlayresolution').html("");
         if (this.stopCallback)
         {
             this.stopCallback();
@@ -195,7 +228,7 @@ Player.reloadVideo = function()
 
 Player.skipInVideo = function()
 {
-	window.clearTimeout(timeout);
+    window.clearTimeout(timeout);
     Player.skipState = -1;
     var timediff = +skipTime - +ccTime;
     timediff = timediff / 1000;
@@ -207,76 +240,67 @@ Player.skipInVideo = function()
     	timediff = 0 - timediff;
     	Player.plugin.JumpBackward(timediff);
     }
-	timeout = window.setTimeout(this.hideControls, 5000);
+    timeout = window.setTimeout(this.hideControls, 5000);
+};
+
+Player.skipForward = function(time)
+{
+    var duration = this.GetDuration();
+    if(this.skipState == -1)
+    {
+        if (((+ccTime + time) > +duration) && (+ccTime <= +duration))
+        {
+            return this.showInfo(true);
+        }
+        skipTime = ccTime;
+    }
+    else if (((+skipTime + time) > +duration) && (+ccTime <= +duration))
+    {
+        return -1
+    }
+    window.clearTimeout(timeoutS);
+    this.showControls();
+    skipTime = +skipTime + time;
+    this.skipState = this.FORWARD;
+    alert("forward skipTime: " + skipTime);
+    this.updateSeekBar(skipTime);
+    timeoutS = window.setTimeout(this.skipInVideo, 2000);
 };
 
 Player.skipForwardVideo = function()
 {
-	window.clearTimeout(timeoutS);
-	this.showControls();
-	if(this.skipState == -1){
-		skipTime = ccTime;
-	}
-	skipTime = +skipTime + 30000;
-	var tsecs = +this.plugin.GetDuration();
-	if(+skipTime > +tsecs){
-		skipTime = +this.plugin.GetDuration();
-	}
-    this.skipState = this.FORWARD;
-    alert("forward skipTime: " + skipTime);
+    this.skipForward(30000);
+};
+
+Player.skipLongForwardVideo = function()
+{
+    this.skipForward(5*60*1000);
+};
+
+Player.skipBackward = function(time)
+{
+    window.clearTimeout(timeoutS);
+    this.showControls();
+    if(this.skipState == -1){
+	skipTime = ccTime;
+    }
+    skipTime = +skipTime - time;
+    if(+skipTime < 0){
+	skipTime = 0;
+    }
+    this.skipState = this.REWIND;
     this.updateSeekBar(skipTime);
-	timeoutS = window.setTimeout(this.skipInVideo, 2000);
+    timeoutS = window.setTimeout(this.skipInVideo, 2000);
 };
 
 Player.skipBackwardVideo = function()
 {
-	window.clearTimeout(timeoutS);
-	this.showControls();
-	if(this.skipState == -1){
-		skipTime = ccTime;
-	}
-	skipTime = +skipTime - 30000;
-	if(+skipTime < 0){
-		skipTime = 0;
-	}
-    this.skipState = this.REWIND;
-    this.updateSeekBar(skipTime);
-	timeoutS = window.setTimeout(this.skipInVideo, 2000);
-};
-
-
-Player.skipLongForwardVideo = function()
-{
-	window.clearTimeout(timeoutS);
-	this.showControls();
-	if(this.skipState == -1){
-		skipTime = ccTime;
-	}
-	skipTime = +skipTime + 5*60*1000;
-	var tsecs = +this.plugin.GetDuration() - 5*60*1000;
-	if(+skipTime > +tsecs){
-		skipTime = tsecs;
-	}
-    this.skipState = this.FORWARD;
-    alert("forward skipTime: " + skipTime);
-    this.updateSeekBar(skipTime);
-	timeoutS = window.setTimeout(this.skipInVideo, 2000);
+    this.skipBackward(30000);
 };
 
 Player.skipLongBackwardVideo = function()
 {
-	window.clearTimeout(timeoutS);
-	this.showControls();
-	if(this.skipState == -1){
-		skipTime = ccTime;
-	}
-	skipTime = +skipTime - 5*60*1000;
-	if(+skipTime < 0){
-		skipTime = 0;
-	}
-    this.skipState = this.REWIND;
-    this.updateSeekBar(skipTime);
-	timeoutS = window.setTimeout(this.skipInVideo, 2000);
+    this.skipBackward(5*60*1000);
 };
 
 Player.getState = function()
@@ -341,7 +365,8 @@ Player.hideControls = function(){
 	$('.video-wrapper').css("display", "none");				
 	$('.video-footer').css("display", "none");
 	$('.bottomoverlaybig').css("display", "none");
-	alert("show controls");
+        Player.infoActive = false;
+	alert("hide controls");
 };
 
 Player.setCurTime = function(time)
@@ -360,10 +385,14 @@ Player.setCurTime = function(time)
 
 Player.updateSeekBar = function(time){
 	var tsecs = time / 1000;
-	var secs = Math.floor(tsecs % 60);
-	var mins = Math.floor(tsecs / 60);
+	var secs  = Math.floor(tsecs % 60);
+	var mins  = Math.floor(tsecs / 60);
+        var hours = Math.floor(mins / 60);
 	var smins;
 	var ssecs;
+
+        mins  = Math.floor(mins % 60);
+
 	if(mins < 10){
 		smins = '0' + mins;
 	}
@@ -377,9 +406,12 @@ Player.updateSeekBar = function(time){
 		ssecs = secs;
 	}
 	
-	$('.currentTime').text(smins + ':' + ssecs);
+	$('.currentTime').text(hours + ':' + smins + ':' + ssecs);
 	
-	var progress = Math.floor(960 * time / Player.plugin.GetDuration());
+        var progressFactor = time / Player.GetDuration();
+        if (progressFactor > 1)
+            progressFactor = 1;
+	var progress = Math.floor(960 * progressFactor);
 	$('.progressfull').css("width", progress);
 	$('.progressempty').css("width", 960 - progress);
    // Display.setTime(time);
@@ -389,12 +421,14 @@ Player.updateSeekBar = function(time){
 
 Player.setTotalTime = function()
 {
-	
-	var tsecs = this.plugin.GetDuration() / 1000;
-	var secs = Math.floor(tsecs % 60);
-	var mins = Math.floor(tsecs / 60);
+	var tsecs = this.GetDuration() / 1000;
+	var secs  = Math.floor(tsecs % 60);
+	var mins  = Math.floor(tsecs / 60);
+        var hours = Math.floor(mins / 60);
 	var smins;
 	var ssecs;
+
+        mins = Math.floor(mins % 60);
 	if(mins < 10){
 		smins = '0' + mins;
 	}
@@ -408,16 +442,24 @@ Player.setTotalTime = function()
 		ssecs = secs;
 	}
 	
-	$('.totalTime').text(smins + ':' + ssecs);
-    //Display.setTotalTime(Player.plugin.GetDuration());
+	$('.totalTime').text(hours + ':' + smins + ':' + ssecs);
+    //Display.setTotalTime(Player.GetDuration());
+        this.setResolution(Player.plugin.GetVideoWidth(), Player.plugin.GetVideoHeight());
 };
 
-Player.showInfo = function()
+Player.showInfo = function(force)
 {
-	window.clearTimeout(timeout);
+    window.clearTimeout(timeout);
+    if (!Player.infoActive || force) {
 	this.showControls();
 	//$('.bottomoverlaybig').css("display", "block");
 	timeout = window.setTimeout(this.hideControls, 5000);
+        Player.infoActive = true;
+    }
+    else
+    {
+        this.hideControls();
+    }
 
 };
 
@@ -455,3 +497,96 @@ Player.OnNetworkDisconnected = function()
 			    });
 };
 
+Player.GetDuration = function()
+{
+    var duration = this.plugin.GetDuration()
+
+    if (duration > this.sourceDuration)
+        return duration;
+    else
+        return this.sourceDuration;
+};
+
+Player.toggleAspectRatio = function() {
+
+    if (Player.getAspectMode() === 0) {
+        Player.setAspectMode(1);
+    }
+    else 
+    {
+        Player.setAspectMode(0);
+    }
+    this.setAspectRatio(Player.plugin.GetVideoWidth(), Player.plugin.GetVideoHeight());
+
+    if (this.state === this.PAUSED) {
+        Player.pauseVideo();
+    }
+};
+
+Player.setResolution = function (videoWidth, videoHeight) {
+
+    if (videoWidth  > 0 && videoHeight > 0) {
+        var aspect = videoWidth / videoHeight;
+        if (aspect == 16/9) {
+            aspect = "16:9";
+        } else if (aspect == 4/3) {
+            aspect = "4:3";
+        }
+        else {
+            aspect = aspect.toFixed(2) + ":1";
+        }
+	$('.topoverlayresolution').html(videoWidth + "x" + videoHeight + " (" + aspect + ")" + this.getAspectModeText());
+        this.setAspectRatio(videoWidth, videoHeight);
+    }
+};
+
+Player.setAspectRatio = function(videoWidth, videoHeight) {
+
+    if (videoWidth > 0 && videoHeight > 0) {
+        if (Player.getAspectMode() === 1 && videoWidth/videoHeight > 4/3)
+        {
+            var cropX     = Math.round(videoWidth/960*120);
+            var cropWidth = videoWidth-(2*cropX);
+            Player.plugin.SetCropArea(cropX, 0, cropWidth, videoHeight);
+        }
+        else
+        {
+            Player.plugin.SetCropArea(0, 0, videoWidth, videoHeight);
+        }
+    }
+};
+
+Player.setAspectMode = function(value)
+{
+    var exdate=new Date();
+    exdate.setDate(exdate.getDate() + 1);
+    var c_value=escape(value) + "; expires="+exdate.toUTCString();
+    document.cookie="aspectMode=" + c_value;
+};
+
+
+Player.getAspectMode = function(){
+    var i,x,y,ARRcookies=document.cookie.split(";");
+    for (i=0;i<ARRcookies.length;i++)
+    {
+        x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+        y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+        x=x.replace(/^\s+|\s+$/g,"");
+        if (x=="aspectMode")
+        {
+            var aspectMode = unescape(y);
+            if (aspectMode)
+                return aspectMode*1
+        }
+    }
+    return 0
+};
+
+Player.getAspectModeText = function()
+{
+    if (this.getAspectMode() === 1) {
+        return " H-FIT";
+    }
+    else 
+        return "";
+};

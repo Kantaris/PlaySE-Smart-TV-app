@@ -15,6 +15,7 @@ var proxy = "";
 
 var Details =
 {
+    duration:null
 
 };
 
@@ -64,35 +65,35 @@ Details.Geturl=function(){
 
 Details.Prepare = function(){
 
-	if(isLive > 0){
-			var url= "http://188.40.102.5/CurrentTime.ashx";
-			alert(url);
-			$.support.cors = true;
-			 $.ajax(
-		    {
-		        type: 'GET',
-		        url: url,
-				timeout: 15000,
-				tryCount : 0,
-			    retryLimit : 3,
-		        success: function(data)
-		        {
-		            alert('Success prepare');
-		            currentTime = +($(data).find('CurrentTime').text());
-		            alert("currentTime=" + currentTime);
-		            if(airTime > currentTime){
-						 countd = airTime - currentTime + 60;
-						 alert("countd = " + countd);
-						 downCounter = setInterval(Details.CountDown, 1000); 
-					 }
-					 else{
-						 Details.GetPlayUrl();
-					 }
-		        }
-		    , 
+    if(isLive > 0){
+	var url= "http://188.40.102.5/CurrentTime.ashx";
+	alert(url);
+	$.support.cors = true;
+	$.ajax(
+	    {
+		type: 'GET',
+		url: url,
+		timeout: 15000,
+		tryCount : 0,
+		retryLimit : 3,
+		success: function(data)
+		{
+		    alert('Success prepare');
+		    currentTime = +($(data).find('CurrentTime').text());
+		    alert("currentTime=" + currentTime);
+		    if(airTime > currentTime){
+			countd = airTime - currentTime + 60;
+			alert("countd = " + countd);
+			downCounter = setInterval(Details.CountDown, 1000); 
+		    }
+		    else{
+			Details.GetPlayUrl();
+		    }
+		}
+		, 
 	        error: function(XMLHttpRequest, textStatus, errorThrown)
 	        {
-	          	if (textStatus == 'timeout') {
+	            if (textStatus == 'timeout') {
 	                this.tryCount++;
 	                if (this.tryCount <= this.retryLimit) {
 	                    //try again
@@ -101,18 +102,18 @@ Details.Prepare = function(){
 	                }            
 	                return;
 	            }
-	        	else{
-	        		alert('Failure');
-	        		ConnectionError.show();
-	        	}
-	         
+	            else{
+	        	alert('Failure');
+	        	ConnectionError.show();
+	            }
+	            
 	        }
-		    });	
-			 
-	}
-	else{
-		 this.GetPlayUrl();
-	 }
+	    });	
+	
+    }
+    else{
+	this.GetPlayUrl();
+    }
 
 };
 
@@ -175,9 +176,18 @@ Details.GetPlayUrl = function(){
 				    	break;
 				    }
 				}
+                                srtUrl="";
+                                for (var i = 0; i < val.subtitleReferences.length; i++) {
+				    alert(val.subtitleReferences[i].url);
+				    srtUrl = val.subtitleReferences[i].url;
+                                    if (srtUrl.length > 0){
+				    	break;
+				    }
+				}
+                                Player.setDuration(Details.duration);
 
 				if(videoUrl.indexOf('.m3u8') >= 0){
-					 Resolution.getCorrectStream(videoUrl, isLive);
+				    Resolution.getCorrectStream(videoUrl, isLive, srtUrl);
 				}
 				else{
 				    Player.stopCallback();	
@@ -200,142 +210,147 @@ Details.GetPlayUrl = function(){
 };
 
 Details.loadXml = function(){
-	var url= "http://188.40.102.5/details.ashx?link="+this.Geturl();
-	var playDirectly = document.location.href.search("\\?play") != -1;
-	alert(url);
-	$.support.cors = true;
-	 $.ajax(
-    {
-        type: 'GET',
-        url: url,
-		timeout: 15000,
-		tryCount : 0,
+    var url= "http://188.40.102.5/details.ashx?link="+this.Geturl();
+    var playDirectly = document.location.href.search("\\?play") != -1;
+
+    alert(url);
+    alert(playDirectly);
+    $.support.cors = true;
+    $.ajax(
+        {
+            type: 'GET',
+            url: url,
+	    timeout: 15000,
+	    tryCount : 0,
 	    retryLimit : 3,
-        success: function(data)
-        {
-            alert('Success');
-        $(data).find('VideoInfo').each(function(){
-			
-				
-            var $video = $(this); 
-            var Name = $video.find('Name').text();
-			var DetailsImgLink = $video.find('DetailsImgLink').text();
-			var DetailsPlayTime = $video.find('DetailsPlayTime').text();
-			if(Language.getisSwedish()){
-				nowPlaying='Nu visas';
-			}else{
-				nowPlaying='Now playing';
-				DetailsPlayTime=DetailsPlayTime.replace("igår","yesterday");
-				DetailsPlayTime=DetailsPlayTime.replace("idag","today");
-			}
-			var Date  = $video.find('Date').text();
-			var VideoLength=$video.find('VideoLength').text();
-			var Description=$video.find('Description').text();
-			var onlySweden = $video.find('OnlySweden').text();
-			isLive = +($video.find('Live').text());
-			airTime = +($video.find('AirTime').text());
-			alert("isLive=" + isLive);
-			alert("airTime=" + airTime);
-			alert(onlySweden);
-			if(onlySweden == "True"){
-				//proxy = 'http://playse.kantaris.net/?mode=native&url=';
-				$.getJSON( "http://smart-ip.net/geoip-json?callback=?",
-					function(data){
-						if(data.countryCode != 'SE'){
-							
-							//Geofilter.show();	
-						}
-					}
-				);
-			}
-			if(Name.length > 47){
-				Name = Name.substring(0, 47)+ "...";
-			}
-			$('.topoverlaybig').html(nowPlaying+': ' + Name);////
-			var html = '<div class="project-text">';
-		        html+='<div class="project-name">';
-		        html+='<h1>'+Name+'</h1>';
-		        html+='<div class="project-meta border"><a id="aired" type="text">Sändes: </a><a>'+DetailsPlayTime+'</a></div>';
-		        html+='<div class="project-meta border"><a id="available" type="text">Tillgänglig till: </a><a>'+Date+'</a></div>';
-				html+='<div class="project-meta"><a id="duration" type="text">Längd: </a><a>'+VideoLength+'</a></div>';
-		        html+='<div class="project-desc">'+Description+'</div>';
-		        html+='<div class="bottom-buttons">';
-                html+='<a href="#" id="playButton" class="link-button selected">Spela upp</a> ';
-                html+='<a href="#" id="backButton" class="link-button">Tillbaka</a>';
-                html+=' </div>';
-		        html+=' </div>';
-		        
-                html+='</div>';
-				html+='<img class="imagestyle" src="'+DetailsImgLink+'" alt="Image" />';
-            	$('#projdetails').html(html);
-			
-			Language.setDetailLang();
-        });
-	if (playDirectly)
-        	Details.startPlayer();
-   },
-        error: function(XMLHttpRequest, textStatus, errorThrown)
-        {
+            success: function(data)
+            {
+                alert('Success');
+                $(data).find('VideoInfo').each(function(){
+		    
+		    
+                    var $video = $(this); 
+                    var Name = $video.find('Name').text();
+		    var DetailsImgLink = $video.find('DetailsImgLink').text();
+		    var DetailsPlayTime = $video.find('DetailsPlayTime').text();
+		    if(Language.getisSwedish()){
+			nowPlaying='Nu visas';
+		    }else{
+			nowPlaying='Now playing';
+			DetailsPlayTime=DetailsPlayTime.replace("igår","yesterday");
+			DetailsPlayTime=DetailsPlayTime.replace("idag","today");
+		    }
+		    var Date  = $video.find('Date').text();
+		    var VideoLength=$video.find('VideoLength').text();
+		    var Description=$video.find('Description').text();
+		    var onlySweden = $video.find('OnlySweden').text();
+                    Details.duration = VideoLength;
+                    // alert('JTDEBUG:Details.duration set:' + Details.duration);
+		    isLive = +($video.find('Live').text());
+		    airTime = +($video.find('AirTime').text());
+		    alert("isLive=" + isLive);
+		    alert("airTime=" + airTime);
+		    alert(onlySweden);
+		    if(onlySweden == "True"){
+			//proxy = 'http://playse.kantaris.net/?mode=native&url=';
+			$.getJSON( "http://smart-ip.net/geoip-json?callback=?",
+				   function(data){
+				       if(data.countryCode != 'SE'){
+					   
+					   //Geofilter.show();	
+				       }
+				   }
+				 );
+		    }
+		    if(Name.length > 47){
+			Name = Name.substring(0, 47)+ "...";
+		    }
+		    $('.topoverlaybig').html(nowPlaying+': ' + Name);////
+		    var html = '<div class="project-text">';
+		    html+='<div class="project-name">';
+		    html+='<h1>'+Name+'</h1>';
+		    html+='<div class="project-meta border"><a id="aired" type="text">Sändes: </a><a>'+DetailsPlayTime+'</a></div>';
+		    html+='<div class="project-meta border"><a id="available" type="text">Tillgänglig till: </a><a>'+Date+'</a></div>';
+		    html+='<div class="project-meta"><a id="duration" type="text">Längd: </a><a>'+VideoLength+'</a></div>';
+		    html+='<div class="project-desc">'+Description+'</div>';
+		    html+='<div class="bottom-buttons">';
+                    html+='<a href="#" id="playButton" class="link-button selected">Spela upp</a> ';
+                    html+='<a href="#" id="backButton" class="link-button">Tillbaka</a>';
+                    html+=' </div>';
+		    html+=' </div>';
+		    
+                    html+='</div>';
+		    html+='<img class="imagestyle" src="'+DetailsImgLink+'" alt="Image" />';
+            	    $('#projdetails').html(html);
+		    
+		    Language.setDetailLang();
+                });
+                if (playDirectly)
+                    Details.startPlayer();
+                    
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown)
+            {
           	if (textStatus == 'timeout') {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    //try again
-                    $.ajax(this);
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        $.ajax(this);
+                        return;
+                    }            
                     return;
-                }            
-                return;
-            }
+                }
         	else{
-        		alert('Failure');
-        		ConnectionError.show();
+        	    alert('Failure');
+        	    ConnectionError.show();
         	}
-         
-        }
-    });
+                
+            }
+        });
 
 };
 
 
 Details.startPlayer = function()
-{				
-		var playDirectly = document.location.href.search("\\?play") != -1;
-
-		if(Language.getisSwedish()){
-			buff='Buffrar';
-		}else{
-			buff='Buffering';
-		}
-		$('#outer').css("display", "none");
-		$('.video-wrapper').css("display", "block");
-		$('.video-footer').css("display", "block");
-		$('.bottomoverlaybig').css("display", "block");
-		$('.bottomoverlaybig').html(buff+': 0%');
+{
+    var playDirectly = document.location.href.search("\\?play") != -1;
 		
+    if(Language.getisSwedish()){
+	buff='Buffrar';
+    }else{
+	buff='Buffering';
+    }
+    $('#outer').css("display", "none");
+    $('.video-wrapper').css("display", "block");
+    $('.video-footer').css("display", "block");
+    $('.bottomoverlaybig').css("display", "block");
+    $('.bottomoverlaybig').html(buff+': 0%');
+    
 
-		Buttons.setKeyHandleID(2);
-		
-		if ( Player.init() && Audio.init())
-		{
-			
-			Player.stopCallback = function()
-			{
-				isPlaying = 0;
-				$('#outer').css("display", "block");
-				$('.video-wrapper').css("display", "none");
-		
-				$('.video-footer').css("display", "none");
-				
-				Buttons.setKeyHandleID(1);
-				/* Return to windowed mode when video is stopped
-					(by choice or when it reaches the end) */
-			 //   Main.setWindowMode();
-				if (playDirectly)
-					history.go(-1);
-			};
-
-			//Player.setVideoURL("http://svt10hls-lh.akamaihd.net/i/svt10hls_0@78142/master.m3u8?__b__=563&bkup=off"  + "|COMPONENT=HLS");
-			isPlaying = 1;
-			this.Prepare();
-		}
+    Buttons.setKeyHandleID(2);
+    
+    if ( Player.init() && Audio.init())
+    {
 	
+	Player.stopCallback = function()
+	{
+	    isPlaying = 0;
+	    $('#outer').css("display", "block");
+	    $('.video-wrapper').css("display", "none");
+	    
+	    $('.video-footer').css("display", "none");
+	    
+	    Buttons.setKeyHandleID(1);
+	    /* Return to windowed mode when video is stopped
+	       (by choice or when it reaches the end) */
+	    //   Main.setWindowMode();
+            if (playDirectly)
+                history.go(-1);
+	};
+
+	//Player.setVideoURL("http://svt10hls-lh.akamaihd.net/i/svt10hls_0@78142/master.m3u8?__b__=563&bkup=off"  + "|COMPONENT=HLS");
+	isPlaying = 1;
+	this.Prepare();
+    }
+    
 };

@@ -25,22 +25,22 @@ function Input(/**Object*/id)
     var installFocusKeyCallbacks = function() 
     {
         ime.setKeyFunc(tvKey.KEY_RETURN, onReturn);
-        ime.setKeyFunc(tvKey.KEY_EXIT, onReturn);
-        ime.setKeyFunc(tvKey.KEY_BLUE, onReturn);
+        ime.setKeyFunc(tvKey.KEY_EXIT, onReturn); 
         ime.setKeyFunc(tvKey.KEY_ENTER, onEnter); //do
+        ime.setKeyFunc(tvKey.KEY_RED, onRed); 
     };
     
     var installStatusCallbacks = function()
     {
         // ime.setKeySetFunc('12key'); 
         ime.setKeypadPos(350, 155);
+        ime.setWordBoxPos(290, -1);
         // ime.setKeypadPos(350, 169);
         // ime.setQWERTYPos(215, 169);
     };
     
     var onEnter = function(string)
     {
-        // Cleanup IME before triggering the search
         Search.imeShow(0);
 	window.location = 'SearchList.html?sok=' + $('#ime_write').val();
 	return true;
@@ -50,10 +50,16 @@ function Input(/**Object*/id)
         Search.imeShow();
 	return true;
     };
+
+    var onRed = function() {
+        ime.setString("");
+        return true
+    };
 }
 
 Search.init = function()
 {
+
 	var html = '<div class="search-content">';
 	html += '<div class="input_bg">';
 	html += '<input id="write" class="footer_input" type="text" value="Sök programtitlar..." />';
@@ -126,8 +132,19 @@ Search.init = function()
 	$('.slider-search').html(html);
 
 	var ime_html = '<div class="imesearch-content">';
+        // var search_text = "";
+        // if (input != null){
+        //     search_text = $('#ime_write').val();
+        //     alert("Search.init search_text:" + search_text);
+        // }
+        // else
+        // {
+        //     alert("Search.init null");
+        // }
 	ime_html += '<div class="input_bg">';
-	ime_html += '<input id="ime_write" class="footer_input" type="text" value="" />';
+        ime_html += '    <form id="searchForm" onSubmit="return false;">';
+	ime_html += '        <input id="ime_write" type="text" class="footer_input" maxlength="256" />';
+	ime_html += '    </form>';
 	ime_html += '</div>';
 	ime_html += '</div>';
 	$('.slider-imesearch').html(ime_html);
@@ -150,12 +167,11 @@ Search.show = function()
 
 Search.imeShow = function(slideDuration)
 {
-    alert("Search.imeShow called");
-
     if (slideDuration == undefined)
-        // Set default value
+        // Default value
         slideDuration = 500
 
+    alert("Search.imeShow called:" + slideDuration);
     if(Buttons.getKeyHandleID()!=7){
         oldKeyHandle = Buttons.getKeyHandleID();
         Buttons.setKeyHandleID(7);
@@ -182,9 +198,9 @@ Search.imeShow = function(slideDuration)
     else{
         $(".slider-imesearch").slideToggle(slideDuration, function() {});
         document.getElementById("ime_write").blur()
-	document.body.focus();
+        document.body.focus();
         Buttons.setKeyHandleID(oldKeyHandle); 
-	Buttons.enableKeys();
+        Buttons.enableKeys();
     }
 };
 
@@ -196,7 +212,6 @@ Search.imeReady = function()
 
 Search.hide = function()
 {
-	
 	if(Buttons.getKeyHandleID()==4){
 		Buttons.setKeyHandleID(oldKeyHandle);
 		$(".slider-search").slideToggle(500, function() {});	

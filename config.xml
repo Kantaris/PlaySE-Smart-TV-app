@@ -13,6 +13,8 @@
 	<mgrver itemtype="string"></mgrver>
 	<fullwidget itemtype="boolean">y</fullwidget>
 	<type itemtype="string">user</type>
+        <network itemtype="boolean">n</network>
+        <hubsite itemtype="boolean">n</hubsite>
 	<srcctl itemtype="boolean">y</srcctl>
 	<ticker itemtype="boolean">n</ticker>
 	<childlock itemtype="boolean">n</childlock>

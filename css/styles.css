@@ -2,15 +2,14 @@
 html,body{height:540px;width:960px;}
 
 body {
-	
-	text-align:center;
+	/*text-align:center;*/ Messed up IME T9...
 	min-height:540px;/* for good browsers*/
 	min-width:960px;/* for good browsers*/
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:13px;
 	overflow:hidden;
-
 }
+
 .topmenu a:hover, .topmenu a.active, .news-name a, .scroll-item-name a:hover, a.link-view, .column h2, .news-name h2, a.link-button.selected, 
 a.link-button2, a.link-button4.selected, .btn-submit, .short-title a:hover, a:hover, .contact-form .btn-submit, h1, .dropdown .root-item span, #cboxTitle{
  color:#58b827;
@@ -689,7 +688,7 @@ margin-top:30px;
 	width: 300px;
 	height: 350px;
 	position: relative;
-	padding:5px 0 0 17px;
+	padding:5px 0 0 37px;
 	float:left}
 
 .project-name h1 {
@@ -702,8 +701,8 @@ margin-top:30px;
 	padding:7px 0;}
 	
 .project-category{
-	margin-left: 8px;
-	font-size:13px;
+    margin-left: 8px;
+    font-size:13px;
 }
 
 .project-view .project-meta {
@@ -1071,7 +1070,9 @@ small {
 .bottomoverlayred      { position: absolute; top: 110px; left: 0; color: #e0e7ea; font: bold 12px/24px Helvetica, Sans-Serif; letter-spacing: -1px;  
                       background: rgb(255, 0, 0); background: rgba(255, 0, 0, 0.7);  margin-left:6px;  padding: 0 10px; }
 					  
-.topoverlaybig         { position: absolute; top: 340px; left: 0; color: #e0e7ea; font: bold 30px/60px Helvetica, Sans-Serif; letter-spacing: -1px;  
+.topoverlayresolution { position: absolute; top: 35px; left: 0; color: #e0e7ea; font: bold 16px/18px Helvetica, Sans-Serif; letter-spacing: -1px;  width: inherit; height: inherit; display: block; vertical-align: middle;
+                      background: rgb(255, 0, 0); background: rgba(0, 0, 0, 0.7);  padding: 0 10px;}
+.topoverlaybig         { position: absolute; top: 340px; left: 0; color: #e0e7ea; font: bold 30px/60px Helvetica, Sans-Serif; letter-spacing: -1px; width: inherit; height: inherit; display: block; vertical-align: middle;
                       background: rgb(255, 0, 0); background: rgba(0, 0, 0, 0.7);  padding: 0 10px; }
 .bottomoverlaybig      {display:none; position: absolute; top: 400px; left: 0; color: #e0e7ea; font: bold 30px/60px Helvetica, Sans-Serif; letter-spacing: -1px;  
                       background: rgb(255, 0, 0); background: rgba(0, 0, 0, 0.7);  padding: 0 10px; }
@@ -1147,23 +1148,23 @@ small {
 
 .input_bg 
 {
-	margin: 10px auto;
-	
-	background:url(../images/inputback.png);
+    margin: 10px auto;	
+    background:url(../images/inputback.png);
     width: 680px;
     height: 54px;
     background-color:Green;
     padding-top: 11px;
 }
+
 .footer_input {
-width: 560px;
-float:left;
-height: 43px;
-border: 0px;
-font: bold 18px/43px 'tahoma','Apple Gothic';
-color: #528cd3;
-padding: 0 10px;
-margin-left: 12px;
+    width: 560px;
+    float:left;
+    height: 43px;
+    border: 0px;
+    font: bold 18px/43px 'tahoma','Apple Gothic';
+    color: #528cd3;
+    padding: 0 10px;
+    margin-left: 12px;
 }
 
 .filter-content a {
@@ -1461,7 +1462,6 @@ list-style: none;
 	height:21px;
 
 }
-
 
 .stitle {
 	border-bottom: 1px solid #5FB932;

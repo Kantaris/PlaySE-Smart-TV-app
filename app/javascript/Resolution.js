@@ -35,7 +35,7 @@ Resolution.getTarget = function(){
 	
 };
 
-Resolution.getCorrectStream = function(videoUrl, isLive){
+Resolution.getCorrectStream = function(videoUrl, isLive, srtUrl){
 	alert('target: ' + target);
 	if(target > 0){
 		$.support.cors = true;
@@ -86,14 +86,14 @@ Resolution.getCorrectStream = function(videoUrl, isLive){
 					}
 				}
 				alert('current: ' + current);
-				Player.setVideoURL(urls[currentId] + "|COMPONENT=HLS");
+		   Player.setVideoURL(urls[currentId] + "|COMPONENT=HLS", srtUrl);
 				Player.playVideo();
 				
 	       }
 	   });
 	}
 	else{
-		Player.setVideoURL(videoUrl + "|COMPONENT=HLS");
+	    Player.setVideoURL(videoUrl + "|COMPONENT=HLS", srtUrl);
 		Player.playVideo();
 	}
 
@@ -126,7 +126,7 @@ document.cookie=cName + "=" + c_value;
 Resolution.checkRes = function()
 {
 var res=this.getCookie("res");
-var defa = 3;
+var defa = 5;
 if (res!=null && res!="")
   {
   return res;
@@ -146,7 +146,7 @@ Resolution.setRes = function(value)
 Resolution.checkLiveRes = function()
 {
 var res=this.getCookie("liveres");
-var defa = 2;
+var defa = 4;
 if (res!=null && res!="")
   {
   return res;

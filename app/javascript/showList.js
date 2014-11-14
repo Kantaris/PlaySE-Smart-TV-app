@@ -4,7 +4,6 @@ var columnCounter = 0;
 var historyPath;
 var showList =
 {
-
 };
 
 showList.onLoad = function()
