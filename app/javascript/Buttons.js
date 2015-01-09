@@ -1,8 +1,10 @@
 var tvKey = new Common.API.TVKeyValue();
 
-var index = 0; // list = 0, details = 1, player = 2, kanaler = 3, search = 4, player2 = 5, language = 6, blocked = 7, connection error = 8
-var fired = false;
+var index = 0; // list = 0, details = 1, player = 2, kanaler = 3, search = 4, player2 = 5, language = 6, imeSearch = 7, blocked = 8, connection error = 9
+var keyHeld = false;
+var keyTimer;
 var itemSelected;
+var lastKey = 0;
 
 var shift = false;
 var capslock = false;
@@ -12,8 +14,10 @@ var first = true;
 var channels = ['svt1', 'svt2', 'svt24', 'barnkanalen', 'kunskapskanalen'];
 var channelId = 0;
 var isLeft = 1;
-var langmenu = true;
+var menuId = 0;
 var resButton = ["#resauto", "#res1", "#res2", "#res3", "#res4", "#res5"];
+var reslButton = ["#resl1", "#resl2", "#resl3", "#resl4", "#resl5"];
+var langButton = ["#english", "#swedish"];
 var Buttons =
 {
     
@@ -44,9 +48,12 @@ Buttons.keyDown = function()
 		this.keyHandleForLanguage();
 	}
 	else if(index == 7){
-		this.keyHandleForGeofilter();
+		this.keyHandleForImeSearch();
 	}
 	else if(index == 8){
+		this.keyHandleForGeofilter();
+	}
+	else if(index == 9){
 		this.keyHandleForConnectionError();
 	}
 };
@@ -77,9 +84,11 @@ Buttons.enableKeys = function()
 	document.getElementById("anchor").focus();
 };
 
-Buttons.setFired = function() 
+Buttons.clearKey = function() 
 {
-	fired = false;
+    alert("clearKey");
+    lastKey = 0;
+    keyHeld = false;
 };
 
 Buttons.sscroll = function(param) 
@@ -89,7 +98,7 @@ Buttons.sscroll = function(param)
 		xaxis = columnCounter - 1;
 	}
 	xaxis = -xaxis * 260;
-	$('.content-holder').animate({ marginLeft: xaxis}, 500 );
+	$('.content-holder').animate({ marginLeft: xaxis});
 	 
 };
 
@@ -98,11 +107,23 @@ Buttons.keyHandleForList = function()
 	var topItems = $('.topitem');
 	var bottomItems = $('.bottomitem');
 	var keyCode = event.keyCode;
-	alert("Key pressedd: " + keyCode);
 
-	if (!fired) {
-		fired = true;
-		window.setTimeout(this.setFired, 500);
+        if (keyCode != lastKey) {
+            window.clearTimeout(keyTimer);
+            keyHeld = false;
+        }
+
+        if (keyCode != lastKey || keyHeld) {
+                alert("Key handled: " + keyCode + " lastKey=" + lastKey);
+                lastKey = keyCode;
+                window.clearTimeout(keyTimer);
+                if (keyHeld) {
+                    // Use longer to avoid end up in "first repeat is ignored" again.
+	            keyTimer = window.setTimeout(this.clearKey, 600);
+                }
+                else
+	            keyTimer = window.setTimeout(this.clearKey, 300);
+
 		if (!itemSelected) {
 			itemSelected = topItems.eq(0).addClass('selected');
 			columnCounter = 0;
@@ -110,29 +131,37 @@ Buttons.keyHandleForList = function()
 		switch(keyCode)
 		{
 			case tvKey.KEY_RIGHT:
-				
-				itemSelected.removeClass('selected');
-				next = itemSelected.next();
-				if (next.length > 0) {
-					columnCounter++;
-					itemSelected = next.addClass('selected');
-				} else {
-					itemSelected = topItems.eq(0).addClass('selected');
-					columnCounter = 0;
-				}
-				break;
+                            if (keyHeld) {
+                                itemSelected = nextInList(topItems, itemSelected, 4);
+                            }
+                            else {
+                                itemSelected = nextInList(topItems, itemSelected, 1);
+                            }
+	                    break;
+
+	                case tvKey.KEY_CH_UP:
+                        case tvKey.KEY_PANEL_CH_UP:         
+	                case tvKey.KEY_FF:
+                        case tvKey.KEY_FF_:
+                            itemSelected = nextInList(topItems, itemSelected, 4);
+	                    break;
 				
 			case tvKey.KEY_LEFT:
-				itemSelected.removeClass('selected');
-				next = itemSelected.prev();
-				if (next.length > 0) {
-					itemSelected = next.addClass('selected');
-					columnCounter--;
-				} else {
-					itemSelected = topItems.last().addClass('selected');
-					columnCounter = topItems.length - 1;
-				}
-				break;
+                            if (keyHeld) {
+                                itemSelected = prevInList(topItems, itemSelected, 4);
+                            }
+                            else {
+                                itemSelected = prevInList(topItems, itemSelected, 1);
+                            }
+	                    break;
+
+            	        case tvKey.KEY_CH_DOWN:
+         	        case tvKey.KEY_PANEL_CH_DOWN:
+	                case tvKey.KEY_RW:
+                        case tvKey.KEY_REWIND_:
+                            itemSelected = prevInList(topItems, itemSelected, 4);
+	                    break;
+
 			case tvKey.KEY_DOWN:
 				if(bottomItems.length > columnCounter){
 					itemSelected.removeClass('selected');
@@ -143,16 +172,87 @@ Buttons.keyHandleForList = function()
 				itemSelected.removeClass('selected');
 				itemSelected = topItems.eq(columnCounter).addClass('selected');				
 				break;
+			case tvKey.KEY_INFO:
 			case tvKey.KEY_ENTER:
 			case tvKey.KEY_PANEL_ENTER:
+                        case tvKey.KEY_PLAY:
 				var ilink = itemSelected.find('.ilink').attr("href");
 				alert(ilink);
-				window.location = ilink;
+                                if (ilink != undefined)
+                                {
+                                    if (keyCode != tvKey.KEY_INFO && ilink.search("details.html\\?") != -1) {
+                                        alert("JTDEBUG Adding ?play to ilink:" + ilink)
+                                        ilink = ilink + "?play";
+                                    }
+                                    else if (keyCode == tvKey.KEY_INFO && ilink.search("details.html\\?") == -1) {
+                                        // Info only relevant if episode, not if show.
+                                        break;
+                                    }
+	                            window.location = ilink;
+                                }
+                                else {
+	                            itemSelected.removeClass('selected');
+                                    itemSelected = false;
+                                }
 				break;
 		}
 		this.handleMenuKeys(keyCode);
 		this.sscroll(itemSelected);
-	}
+        }
+        else {
+            alert("Key repeated, first time is ignored: " + keyCode + " KeyHeld:" + keyHeld);
+            keyHeld = true;
+            window.clearTimeout(keyTimer);
+	    keyTimer = window.setTimeout(this.clearKey, 600);
+        }
+};
+
+nextInList = function(topItems, itemSelected, steps)
+{
+    itemSelected.removeClass('selected');
+    next = itemSelected.next();
+    while(--steps > 0 && next.length > 0){
+        if ((next.next()).length > 0)
+        {
+            columnCounter++;
+            itemSelected = next.addClass('selected');
+            itemSelected.removeClass('selected');
+            next = itemSelected.next();
+        }
+    }
+
+    if (next.length > 0) {
+        columnCounter++;
+	itemSelected = next.addClass('selected');
+    } else {
+	itemSelected = topItems.eq(0).addClass('selected');
+	columnCounter = 0;
+    }
+    return itemSelected;
+};
+
+prevInList = function(topItems, itemSelected, steps)
+{
+    itemSelected.removeClass('selected');
+    prev = itemSelected.prev();
+    while(--steps > 0 && prev.length > 0){
+        if ((prev.prev()).length > 0)
+        {
+            columnCounter--;
+            itemSelected = prev.addClass('selected');
+            itemSelected.removeClass('selected');
+            prev = itemSelected.prev();
+        }
+    }
+
+    if (prev.length > 0) {
+        columnCounter--;
+	itemSelected = prev.addClass('selected');
+    } else {
+	itemSelected = topItems.last().addClass('selected');
+	columnCounter = topItems.length - 1;
+    }
+    return itemSelected;
 };
 
 Buttons.keyHandleForDetails = function()
@@ -189,48 +289,61 @@ Buttons.keyHandleForDetails = function()
 Buttons.keyHandleForLanguage = function()
 {
 	var keyCode = event.keyCode;
-	if(langmenu){
+	if(menuId == 0){
+		
+		var li = 0;
+		var lSel = -1;
+		for(li = 0; li < langButton.length; li++){
+			if($(langButton[li]).hasClass('selected')){
+				$(langButton[li]).addClass('unselected');
+				$(langButton[li]).removeClass('selected');
+				lSel = li;
+			}
+		}
 		switch(keyCode)
 		{
-			case tvKey.KEY_LEFT:
-			isLeft = 1;
-			$('#english').addClass('selected');
-			$('#english').removeClass('unselected');
-			$('#swedish').addClass('unselected');
-			$('#swedish').removeClass('selected');
-			break;
 			case tvKey.KEY_RIGHT:
-			isLeft = 0;
-			$('#swedish').addClass('selected');
-			$('#swedish').removeClass('unselected');
-			$('#english').addClass('unselected');
-			$('#english').removeClass('selected');
-			break;
+				
+				lSel++;
+				if(lSel < langButton.length){
+					$(langButton[lSel]).addClass('selected');
+					$(langButton[lSel]).removeClass('unselected');
+				}
+				break;
+			case tvKey.KEY_LEFT:
+				lSel--;
+				if(lSel >= 0){
+					$(langButton[lSel]).addClass('selected');
+					$(langButton[lSel]).removeClass('unselected');
+				}
+				break;
 			case tvKey.KEY_ENTER:
 			case tvKey.KEY_PANEL_ENTER:
 				alert("enter");
-				if(isLeft == 0){//0 replace is not left
+				if(lSel == 1){
 					$('#swedish').addClass('checked');
+					$('#swedish').addClass('selected');
 					$('#english').removeClass('checked');
 					Language.setLanguage('Swedish');
 					Language.setLang();
 				}
-				else{
+				else if(lSel == 0){
 					$('#english').addClass('checked');
+					$('#english').addClass('selected');
 					$('#swedish').removeClass('checked');
 					Language.setLanguage('English');
 					Language.setLang();
 				}
 				break;
 			case tvKey.KEY_DOWN:
-				langmenu = false;
+				menuId = 1;
 				$('.res-content .title').addClass('stitle');
 				$('.language-content .title').removeClass('stitle');
 				break;
 		}
 		
 	}
-	else{
+	else if(menuId == 1){
 		var ri = 0;
 		var cSel = -1;
 		for(ri = 0; ri < resButton.length; ri++){
@@ -260,27 +373,90 @@ Buttons.keyHandleForLanguage = function()
 				break;
 			case tvKey.KEY_ENTER:
 			case tvKey.KEY_PANEL_ENTER:
-				alert("enter");
-				var rj = 0;
-				for(rj = 0; rj < resButton.length; rj++){
-					if($(resButton[rj]).hasClass('checked')){
-						$(resButton[rj]).removeClass('checked');
+				if(cSel > -1){
+					alert("enter");
+					var rj = 0;
+					for(rj = 0; rj < resButton.length; rj++){
+						if($(resButton[rj]).hasClass('checked')){
+							$(resButton[rj]).removeClass('checked');
+						}
 					}
+					$(resButton[cSel]).addClass('checked');
+					$(resButton[cSel]).addClass('selected');
+					Resolution.setRes(cSel);
 				}
-				$(resButton[cSel]).addClass('checked');
-				Resolution.setRes(cSel);
-				
 				break;
 			case tvKey.KEY_UP:
-				langmenu = true;
+				menuId = 0;
 				$('.language-content .title').addClass('stitle');
+				$('.res-content .title').removeClass('stitle');
+				break;
+			case tvKey.KEY_DOWN:
+				menuId = 2;
+				$('.res-live-content .title').addClass('stitle');
 				$('.res-content .title').removeClass('stitle');
 				break;
 		}
 		
 	}
+	else if(menuId == 2){
+		var ri = 0;
+		var cSel = -1;
+		for(ri = 0; ri < reslButton.length; ri++){
+			if($(reslButton[ri]).hasClass('selected')){
+				$(reslButton[ri]).addClass('unselected');
+				$(reslButton[ri]).removeClass('selected');
+				cSel = ri;
+			}
+		}
+		alert(cSel);
+		switch(keyCode)
+		{
+			case tvKey.KEY_RIGHT:
+				
+				cSel++;
+				if(cSel < reslButton.length){
+					$(reslButton[cSel]).addClass('selected');
+					$(reslButton[cSel]).removeClass('unselected');
+				}
+				break;
+			case tvKey.KEY_LEFT:
+				cSel--;
+				if(cSel >= 0){
+					$(reslButton[cSel]).addClass('selected');
+					$(reslButton[cSel]).removeClass('unselected');
+				}
+				break;
+			case tvKey.KEY_ENTER:
+			case tvKey.KEY_PANEL_ENTER:
+				if(cSel > -1){
+					alert("enter");
+					var rj = 0;
+					for(rj = 0; rj < reslButton.length; rj++){
+						if($(reslButton[rj]).hasClass('checked')){
+							$(reslButton[rj]).removeClass('checked');
+						}
+					}
+					$(reslButton[cSel]).addClass('checked');
+					$(reslButton[cSel]).addClass('selected');
+					Resolution.setLiveRes(cSel);
+				}
+				break;
+			case tvKey.KEY_UP:
+				menuId = 1;
+				$('.res-content .title').addClass('stitle');
+				$('.res-live-content .title').removeClass('stitle');
+				break;
+			
+		}
+		
+	}
 	this.handleMenuKeys(keyCode);
 	
+};
+
+Buttons.keyHandleForImeSearch = function()
+{
 };
 
 Buttons.keyHandleForSearch = function()
@@ -484,6 +660,12 @@ Buttons.keyHandleForPlayer = function(){
 	var keyCode = event.keyCode;
 	switch(keyCode)
 		{
+			case tvKey.KEY_RIGHT:
+                                Player.skipLongForwardVideo();
+				break;
+			case tvKey.KEY_LEFT:
+                                Player.skipLongBackwardVideo();
+				break;
 			case tvKey.KEY_RW:
 				Player.skipBackwardVideo();
 				break;
@@ -519,6 +701,10 @@ Buttons.keyHandleForPlayer = function(){
 				widgetAPI.blockNavigation(event); 
 				Player.stopVideo();
 				break;
+			case tvKey.KEY_EXIT:
+				Player.stopVideo();
+	            // Terminated by force
+	            break;
 			case tvKey.KEY_INFO:
 				Player.showInfo();
 				break;
@@ -526,8 +712,16 @@ Buttons.keyHandleForPlayer = function(){
 				Audio.toggleMute();
 				break;
 			 break;
+			case tvKey.KEY_BLUE:
+			case tvKey.KEY_ASPECT:
+				Player.toggleAspectRatio();
+				break;
+			 break;
+                    
 		}
 };
+
+
 Buttons.keyHandleForGeofilter = function()
 {
 	var keyCode = event.keyCode;
@@ -557,14 +751,16 @@ Buttons.keyHandleForConnectionError = function()
 		
 	}
 	this.handleMenuKeys(keyCode);
-	
+
 };
 
 Buttons.handleMenuKeys = function(keyCode){
 	switch(keyCode)
 		{
 			case tvKey.KEY_RED: 
-				window.location = 'index.html';
+                                // Use history to be able to use IME
+                                history.go(-(history.length - 1));
+				// window.location = 'index.html';
 				break;
 			case tvKey.KEY_GREEN: 
 				window.location = 'categories.html';
@@ -573,24 +769,47 @@ Buttons.handleMenuKeys = function(keyCode){
 				window.location = 'live.html';
 				break;
 			case tvKey.KEY_BLUE:
-				Search.show();
+				Language.hide();
+                                if (window.location.href.search('/index.html') != -1) {
+                                    alert("Search in index.html");
+                                    Search.imeShow();
+                                }
+                                else {
+                                    alert("Search in other" + window.location.href);
+	                            Search.show();
+                                }
 				break;
 			case tvKey.KEY_RETURN:
 				var urlpath = window.location.href;
 				var ifound = urlpath.indexOf('index.html');
 				if(index == 6){
 					widgetAPI.blockNavigation(event); 
-					Language.show();
+					Language.hide();
+				}
+				else if(index == 4){
+					widgetAPI.blockNavigation(event); 
+					Search.hide();
 				}
 				else if(ifound < 0){
 					alert("not index.html");
 					widgetAPI.blockNavigation(event); 
 					history.go(-1);
 				}
+				else{
+					//terminate app
+				}
 				break;
+			case tvKey.KEY_EXIT:
+	            // Terminated by force
+	            break;
 			case tvKey.KEY_TOOLS:
 				widgetAPI.blockNavigation(event); 
+				Search.hide();
 				Language.show();
 				break;
+			case tvKey.KEY_MUTE:
+				Audio.uiToggleMute();
+				break;
+			 break;
 		}
 };

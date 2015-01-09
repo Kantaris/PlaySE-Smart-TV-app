@@ -19,7 +19,7 @@ Geofilter.show = function()
 	
 	if(Buttons.getKeyHandleID() != 6){
 		oldKeyHandle = Buttons.getKeyHandleID();
-		Buttons.setKeyHandleID(7);
+		Buttons.setKeyHandleID(8);
 	}
 	else{
 		Buttons.setKeyHandleID(oldKeyHandle);
