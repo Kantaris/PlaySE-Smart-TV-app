@@ -134,7 +134,7 @@ Kanaler.loadXml = function(){
 	    retryLimit : 3,
         success: function(data)
         {
-            alert('Success');
+            alert('Success:' + this.url);
        
         $(data).find('VideoInfo').each(function(){
 		

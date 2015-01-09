@@ -53,7 +53,7 @@ Language.setLang = function(){
 		$('#swedish').removeClass('checked');
 
 		src="url(images/name-english.png)";
-		$("#recommended").text('Recommended');
+		$("#popular").text('Popular');
 		$("#categories").text('Categories');
 		$("#channels").text('Channels & live broadcasts');
 		$("#searchshow").text('Search shows');
@@ -65,7 +65,7 @@ Language.setLang = function(){
 		
 		var ltxt = $("#location").text();
 		alert(ltxt);
-		ltxt = ltxt.replace('Rekommenderat', 'Recommended');
+		ltxt = ltxt.replace('Populärt', 'Popular');
 		ltxt = ltxt.replace('Kategorier', 'Categories');
 		ltxt = ltxt.replace('Kanaler & livesändningar', 'Channels & live broadcasts');
 		ltxt = ltxt.replace('Sök:', 'Search:');
@@ -77,7 +77,7 @@ Language.setLang = function(){
 		$('#swedish').addClass('checked');
 		$('#english').removeClass('checked');
 
-		$("#recommended").text('Rekommenderat');
+		$("#popular").text('Populärt');
 		$("#categories").text('Kategorier');
 		$("#channels").text('Kanaler & livesändningar');
 		$("#searchshow").text('Sök programtitlar');
@@ -87,7 +87,7 @@ Language.setLang = function(){
 		$("#search").text('Sök');
 		
 		var ltxt = $("#location").text();
-		ltxt = ltxt.replace('Recommended', 'Rekommenderat');
+		ltxt = ltxt.replace('Popular', 'Populärt');
 		ltxt = ltxt.replace('Categories', 'Kategorier');
 		ltxt = ltxt.replace('Channels & live broadcasts', 'Kanaler & livesändningar');
 		ltxt = ltxt.replace('Search:', 'Sök:');

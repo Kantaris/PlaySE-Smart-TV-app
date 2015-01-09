@@ -17,7 +17,7 @@ Footer.display = function(mute)
 	
 	html+= '<div class="footer-box-r"><img src="images/menu.png" alt="" border="0" />Inställningar / Settings</div>';
 	html+= rightcorner + leftcorner;
-	html+= '<div class="footer-box-r"><img src="images/red.png" alt="" border="0" /><span id="recommended" >Rekommenderat</span></div>';
+	html+= '<div class="footer-box-r"><img src="images/red.png" alt="" border="0" /><span id="popular" >Populärt</span></div>';
 	html+= rightcorner + leftcorner;
 	html+= '<div class="footer-box-r"><img src="images/green.png" alt="" border="0" /><span id="categories" >Kategorier</span></div>';
 	html+= rightcorner + leftcorner; 

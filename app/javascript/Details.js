@@ -65,55 +65,57 @@ Details.Geturl=function(){
 
 Details.Prepare = function(){
 
-    if(isLive > 0){
-	var url= "http://188.40.102.5/CurrentTime.ashx";
-	alert(url);
-	$.support.cors = true;
-	$.ajax(
-	    {
-		type: 'GET',
-		url: url,
-		timeout: 15000,
-		tryCount : 0,
-		retryLimit : 3,
-		success: function(data)
-		{
-		    alert('Success prepare');
-		    currentTime = +($(data).find('CurrentTime').text());
-		    alert("currentTime=" + currentTime);
-		    if(airTime > currentTime){
-			countd = airTime - currentTime + 60;
-			alert("countd = " + countd);
-			downCounter = setInterval(Details.CountDown, 1000); 
-		    }
-		    else{
-			Details.GetPlayUrl();
-		    }
-		}
-		, 
-	        error: function(XMLHttpRequest, textStatus, errorThrown)
-	        {
-	            if (textStatus == 'timeout') {
-	                this.tryCount++;
-	                if (this.tryCount <= this.retryLimit) {
-	                    //try again
-	                    $.ajax(this);
-	                    return;
-	                }            
-	                return;
-	            }
-	            else{
-	        	alert('Failure');
-	        	ConnectionError.show();
-	            }
+    this.GetPlayUrl();
+
+    // if(isLive > 0){
+    //     var url= "http://188.40.102.5/CurrentTime.ashx";
+    //     alert(url);
+    //     $.support.cors = true;
+    //     $.ajax(
+    //         {
+    //     	type: 'GET',
+    //     	url: url,
+    //     	timeout: 15000,
+    //     	tryCount : 0,
+    //     	retryLimit : 3,
+    //     	success: function(data)
+    //     	{
+    //     	    alert('Success prepare');
+    //     	    currentTime = +($(data).find('CurrentTime').text());
+    //     	    alert("currentTime=" + currentTime);
+    //     	    if(airTime > currentTime){
+    //     		countd = airTime - currentTime + 60;
+    //     		alert("countd = " + countd);
+    //     		downCounter = setInterval(Details.CountDown, 1000); 
+    //     	    }
+    //     	    else{
+    //     		Details.GetPlayUrl();
+    //     	    }
+    //     	}
+    //     	, 
+    //             error: function(XMLHttpRequest, textStatus, errorThrown)
+    //             {
+    //                 if (textStatus == 'timeout') {
+    //                     this.tryCount++;
+    //                     if (this.tryCount <= this.retryLimit) {
+    //                         //try again
+    //                         $.ajax(this);
+    //                         return;
+    //                     }            
+    //                     return;
+    //                 }
+    //                 else{
+    //             	alert('Failure');
+    //             	ConnectionError.show();
+    //                 }
 	            
-	        }
-	    });	
+    //             }
+    //         });	
 	
-    }
-    else{
-	this.GetPlayUrl();
-    }
+    // }
+    // else{
+    //     this.GetPlayUrl();
+    // }
 
 };
 
@@ -210,7 +212,9 @@ Details.GetPlayUrl = function(){
 };
 
 Details.loadXml = function(){
-    var url= "http://188.40.102.5/details.ashx?link="+this.Geturl();
+    var url = this.Geturl();
+    if (url.indexOf("http://") == -1)
+        url = "http://www.svtplay.se" + url
     var playDirectly = document.location.href.search("\\?play") != -1;
 
     alert(url);
@@ -225,66 +229,147 @@ Details.loadXml = function(){
 	    retryLimit : 3,
             success: function(data)
             {
-                alert('Success');
-                $(data).find('VideoInfo').each(function(){
-		    
-		    
-                    var $video = $(this); 
-                    var Name = $video.find('Name').text();
-		    var DetailsImgLink = $video.find('DetailsImgLink').text();
-		    var DetailsPlayTime = $video.find('DetailsPlayTime').text();
-		    if(Language.getisSwedish()){
-			nowPlaying='Nu visas';
-		    }else{
-			nowPlaying='Now playing';
-			DetailsPlayTime=DetailsPlayTime.replace("igår","yesterday");
-			DetailsPlayTime=DetailsPlayTime.replace("idag","today");
-		    }
-		    var Date  = $video.find('Date').text();
-		    var VideoLength=$video.find('VideoLength').text();
-		    var Description=$video.find('Description').text();
-		    var onlySweden = $video.find('OnlySweden').text();
-                    Details.duration = VideoLength;
-                    // alert('JTDEBUG:Details.duration set:' + Details.duration);
-		    isLive = +($video.find('Live').text());
-		    airTime = +($video.find('AirTime').text());
-		    alert("isLive=" + isLive);
-		    alert("airTime=" + airTime);
-		    alert(onlySweden);
-		    if(onlySweden == "True"){
-			//proxy = 'http://playse.kantaris.net/?mode=native&url=';
-			$.getJSON( "http://smart-ip.net/geoip-json?callback=?",
-				   function(data){
-				       if(data.countryCode != 'SE'){
-					   
-					   //Geofilter.show();	
-				       }
+                alert('Success:' + this.url);
+
+                var Name;
+		var DetailsImgLink;
+		var DetailsPlayTime;
+                var VideoLength = "";
+                var AvailDate="";
+		var Description;
+		var onlySweden;
+                var isLive = false;
+
+
+                if (this.url.indexOf("/kanaler/") > -1) {
+                    var $video = $(data).find('div').filter(function() {
+                        return $(this).attr('class') == "play_channels";
+                    });
+
+                    Name = $video.find('a').attr('data-title');
+		    DetailsImgLink = $video.find('img').attr('data-imagename');
+                    if (DetailsImgLink.indexOf("http") == -1)
+                        DetailsImgLink = "http://www.svtplay.se" + DetailsImgLink;
+                    pattern = new RegExp("\\b" + Name + "\\b", "i");
+	            var $info = $(data).find('div').filter(function() {
+                        
+                        return ($(this).attr('class').indexOf("play_channels__active-video-info") > -1 &&
+                                pattern.test($(this).attr('data-channel')));
+                    });
+                    Name = Name + " - " + $($info.children()[0]).text();
+                    VideoLength = $($($info.find('p')[1]).children()[1]).text();
+		    Description = $($info.find('p')[0]).text();
+                    DetailsPlayTime = tsToClock($info.find('div').filter(function() {
+                        if ($(this).attr('data-starttime'))
+                            return true;
+                        else 
+                            return false;
+                    }).attr('data-starttime')*1);
+
+                } else if (url.indexOf("oppetarkiv") == -1) {
+                    var $video = $(data).find('div').filter(function() {
+                        return $(this).attr('class') == "play_container";
+                    });
+
+                    if ($video.find('section').find('a').attr('data-livestart'))
+		        isLive = true;
+
+                    Name = $($video.find('h1')[0]).text().trim();
+		    DetailsImgLink = $video.find('img').attr('data-imagename');
+		    DetailsPlayTime = $video.find('time').text();
+                    if (isLive) {
+                        var duration = $video.find('section').find('a').attr('data-length');
+                        var hours = Math.floor(duration/3600);
+                        if (hours > 0) {
+                            VideoLength = hours + " h "
+                            duration = duration - (hours*3600)
+                        }
+                        var minutes = Math.floor(duration/60);
+                        if (minutes > 0) {
+                            VideoLength = VideoLength + minutes + " min "
+                            duration = duration - (minutes*60)
+                        }
+                        var seconds = Math.floor(duration/60);
+                        if (seconds > 0) {
+                            VideoLength = VideoLength + seconds + " sek"
+                        }                        
+                    } else {
+		        AvailDate  = $($video.find('p')[1]).text().replace("Tillgänglig till ", "");
+                        VideoLength = $video.find('h2').html().replace(/.+span> /,"");
+                    }
+		    Description = $($video.find('p')[0]).text();
+		    onlySweden = $video.find('section').find('a').attr('data-only-available-in-sweden');
+
+                } else {
+                    Name = $($(data).find('img')[1]).attr('alt');
+		    DetailsImgLink = $($(data).find('img')[1]).attr('data-imagename');
+		    DetailsPlayTime = $($(data).find('strong')[0]).text();
+                    VideoLength = $($(data).find('strong')[1]).text();
+
+                    Description = $(data).find('div').filter(function() {
+                        return $(this).attr('class') == "svt-text-bread svt-text-margin-large";
+                    }).text();
+
+		    onlySweden = ($(data).find('span').filter(function() {
+                        return $(this).attr('class') == "svtoa-icon-geoblock svtIcon";
+                    }).length > 0);
+                }
+                // alert("Name:" + Name);
+                // alert("DetailsImgLink:" + DetailsImgLink);
+                // alert("Description:" + Description);
+                // alert("DetailsPlayTime:" + DetailsPlayTime);
+                // alert("VideoLength:" + VideoLength);
+                // alert("onlySweden:" + onlySweden);
+
+
+		if(Language.getisSwedish()){
+		    nowPlaying='Nu visas';
+		}else{
+		    nowPlaying='Now playing';
+		    DetailsPlayTime=DetailsPlayTime.replace("igår","yesterday");
+		    DetailsPlayTime=DetailsPlayTime.replace("idag","today");
+		}
+
+                Details.duration = VideoLength;
+                // alert('JTDEBUG:Details.duration set:' + Details.duration);
+
+                airTime = DetailsPlayTime;
+		// alert("isLive=" + isLive);
+		// alert("airTime=" + airTime);
+		if (onlySweden != "false" && onlySweden != false) {
+		    //proxy = 'http://playse.kantaris.net/?mode=native&url=';
+		    $.getJSON( "http://smart-ip.net/geoip-json?callback=?",
+			       function(data){
+				   if(data.countryCode != 'SE'){
+				       
+				       //Geofilter.show();	
 				   }
-				 );
-		    }
-		    if(Name.length > 47){
-			Name = Name.substring(0, 47)+ "...";
-		    }
-		    $('.topoverlaybig').html(nowPlaying+': ' + Name);////
-		    var html = '<div class="project-text">';
-		    html+='<div class="project-name">';
-		    html+='<h1>'+Name+'</h1>';
-		    html+='<div class="project-meta border"><a id="aired" type="text">Sändes: </a><a>'+DetailsPlayTime+'</a></div>';
-		    html+='<div class="project-meta border"><a id="available" type="text">Tillgänglig till: </a><a>'+Date+'</a></div>';
-		    html+='<div class="project-meta"><a id="duration" type="text">Längd: </a><a>'+VideoLength+'</a></div>';
-		    html+='<div class="project-desc">'+Description+'</div>';
-		    html+='<div class="bottom-buttons">';
-                    html+='<a href="#" id="playButton" class="link-button selected">Spela upp</a> ';
-                    html+='<a href="#" id="backButton" class="link-button">Tillbaka</a>';
-                    html+=' </div>';
-		    html+=' </div>';
-		    
-                    html+='</div>';
-		    html+='<img class="imagestyle" src="'+DetailsImgLink+'" alt="Image" />';
-            	    $('#projdetails').html(html);
-		    
-		    Language.setDetailLang();
-                });
+			       }
+			     );
+		}
+		if(Name.length > 47){
+		    Name = Name.substring(0, 47)+ "...";
+		}
+		$('.topoverlaybig').html(nowPlaying+': ' + Name);////
+		var html = '<div class="project-text">';
+		html+='<div class="project-name">';
+		html+='<h1>'+Name+'</h1>';
+		html+='<div class="project-meta border"><a id="aired" type="text">Sändes: </a><a>'+DetailsPlayTime+'</a></div>';
+		html+='<div class="project-meta border"><a id="available" type="text">Tillgänglig till </a><a>'+AvailDate+'</a></div>';
+		html+='<div class="project-meta"><a id="duration" type="text">Längd: </a><a>'+VideoLength+'</a></div>';
+		html+='<div class="project-desc">'+Description+'</div>';
+		html+='<div class="bottom-buttons">';
+                html+='<a href="#" id="playButton" class="link-button selected">Spela upp</a> ';
+                html+='<a href="#" id="backButton" class="link-button">Tillbaka</a>';
+                html+=' </div>';
+		html+=' </div>';
+		
+                html+='</div>';
+		html+='<img class="imagestyle" src="'+DetailsImgLink+'" alt="Image" />';
+            	$('#projdetails').html(html);
+		
+		Language.setDetailLang();
+
                 if (playDirectly)
                     Details.startPlayer();
                     
@@ -353,4 +438,18 @@ Details.startPlayer = function()
 	this.Prepare();
     }
     
+};
+
+function tsToClock(ts)
+{
+    var time = new Date(ts *1);
+    var hour = time.getHours();
+    var minutes = time.getMinutes();
+    if (hour < 10) hour = "0" + hour;
+    if (minutes < 10) minutes = "0" + minutes;
+    return hour + ":" + minutes;
+};
+
+String.prototype.trim = function () {
+    return this.replace(/^\s*/, "").replace(/\s*$/, "");
 };

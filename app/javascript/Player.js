@@ -472,7 +472,8 @@ Player.OnNetworkDisconnected = function()
 	 $.ajax(
 			    {
 			        type: 'GET',
-			        url: 'http://188.40.102.5/recommended.ashx',
+			        // url: 'http://188.40.102.5/recommended.ashx',
+                                url: 'http://www.svtplay.se/populara?sida=1',
 					timeout: 10000,
 			        success: function(data)
 			        {
@@ -480,7 +481,7 @@ Player.OnNetworkDisconnected = function()
 			        	var $entries = $(data).find('video');
 
 			        	if ($entries.length > 0) {
-			        		alert('Success');
+			        		alert('Success:' + this.url);
 			        		Player.reloadVideo();
 			        	}
 			        	else{
